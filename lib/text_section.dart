@@ -107,7 +107,7 @@ class TextSectiontwo extends StatelessWidget {
                           2.0), // Set the horizontal and vertical offset for the shadow
                     ),
                   ],
-                  fontSize: 25,
+                  fontSize: 22,
                   color: Color(0xff21d4f3),
               ),
             ),
