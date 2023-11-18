@@ -36,7 +36,7 @@ void navigateToPdfViewer(BuildContext context) {
   Navigator.push(
   context,
   MaterialPageRoute(
-    builder: (context) => PdfViewerPage(pdfAsset: 'https://hbnnarzullayev.pythonanywhere.com/static/pdf/sayyor.pdf',),
+    builder: (context) => PdfViewerPage(pdfAsset: 'assets/Maruza1.pdf',),
   ),
 );
 
