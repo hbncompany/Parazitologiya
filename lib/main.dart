@@ -10,11 +10,13 @@ import 'package:provider/provider.dart';
 // import 'package:internet_file/internet_file.dart';
 import 'package:flutter_pdfview/flutter_pdfview.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path_provider/path_provider.dart';
 import 'image_banner.dart';
 import 'text_section.dart';
+import 'dart:async';
 // import 'package:flutter_html/flutter_html.dart';
 // import 'package:path_provider/path_provider.dart';
-// import 'dart:io';
+import 'dart:io';
 // import 'package:flutter_full_pdf_viewer/flutter_full_pdf_viewer.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
 // void main() {
@@ -32,15 +34,15 @@ Future<void> main() async {
   );
 }
 
-void navigateToPdfViewer(BuildContext context) {
-  Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (context) => PdfViewerPage(pdfAsset: 'assets/Maruza1.pdf',),
-  ),
-);
-
-}
+// void navigateToPdfViewer(BuildContext context) {
+//   Navigator.push(
+//   context,
+//   MaterialPageRoute(
+//     builder: (context) => PdfViewerPage(pdfAsset: 'assets/images/Maruza1.pdf',),
+//   ),
+// );
+//
+// }
 
 class AuthProvider with ChangeNotifier {
   String _username = "";
@@ -806,10 +808,70 @@ class Fail extends StatelessWidget {
   }
 }
 
-class PdfViewerPage extends StatelessWidget {
-  final String pdfAsset; // Replace this with your PDF file asset path
+// class PdfViewerPage extends StatelessWidget {
+//   final String pdfAsset; // Replace this with your PDF file asset path
+//
+//   PdfViewerPage({required this.pdfAsset});
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text("PDF Viewer"),
+//       ),
+//       body: PDFView(
+//         filePath: pdfAsset,
+//         // Use `filePath` if your PDF is on the device
+//         // Use `asset` if your PDF is in the assets folder
+//         // asset: pdfAsset,
+//         // or
+//         // network: "https://example.com/your.pdf",
+//         // if your PDF is hosted online
+//         onRender: (pages) {
+//           // Do something when rendering is finished
+//         },
+//         onError: (error) {
+//           print(error);
+//         },
+//         onPageError: (page, error) {
+//           print('$page: $error');
+//         },
+//       ),
+//     );
+//   }
+// }
 
-  PdfViewerPage({required this.pdfAsset});
+class PdfViewerPage extends StatefulWidget {
+  final String pdfUrl;
+
+  PdfViewerPage({required this.pdfUrl});
+
+  @override
+  _PdfViewerPageState createState() => _PdfViewerPageState();
+}
+
+class _PdfViewerPageState extends State<PdfViewerPage> {
+  late String downloadedFilePath;
+
+  @override
+  void initState() {
+    super.initState();
+    downloadFile();
+  }
+
+  Future<void> downloadFile() async {
+    final response = await http.get(Uri.parse(widget.pdfUrl));
+    final documentDirectory = await getApplicationDocumentsDirectory();
+
+    final file = File("${documentDirectory.path}/your_pdf_filename.pdf");
+    await file.writeAsBytes(response.bodyBytes);
+
+    if (mounted) {
+      setState(() {
+        downloadedFilePath = file.path;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -817,14 +879,9 @@ class PdfViewerPage extends StatelessWidget {
       appBar: AppBar(
         title: Text("PDF Viewer"),
       ),
-      body: PDFView(
-        filePath: pdfAsset,
-        // Use `filePath` if your PDF is on the device
-        // Use `asset` if your PDF is in the assets folder
-        // asset: pdfAsset,
-        // or
-        // network: "https://example.com/your.pdf",
-        // if your PDF is hosted online
+      body: downloadedFilePath.isNotEmpty
+          ? PDFView(
+        filePath: downloadedFilePath,
         onRender: (pages) {
           // Do something when rendering is finished
         },
@@ -834,9 +891,39 @@ class PdfViewerPage extends StatelessWidget {
         onPageError: (page, error) {
           print('$page: $error');
         },
+      )
+          : Center(
+        child: CircularProgressIndicator(),
       ),
     );
   }
+}
+
+void navigateToPdfViewer(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(pdfUrl: 'https://hbnnarzullayev.pythonanywhere.com/static/pdf/1-Maruza.pdf'),
+    ),
+  );
+}
+
+void navigateToPdfViewer2(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(pdfUrl: 'https://sardorbek95.pythonanywhere.com/Maruza/2-Maruza.pdf'),
+    ),
+  );
+}
+
+void navigateToPdfViewer3(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(pdfUrl: 'https://sardorbek95.pythonanywhere.com/Maruza/3-Maruza.pdf'),
+    ),
+  );
 }
 
 class Profilepage extends StatefulWidget {
@@ -1075,15 +1162,11 @@ class Lectures extends StatelessWidget {
                     height: MediaQuery.of(context).size.height * 0.15,
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
-                      onPressed: ()  {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const M3()),
-                        );
+                      onPressed: () {
+                        navigateToPdfViewer2(context);
                       },
                       child: const Text(
-                        "2-Ma'ruza",
+                        '2-Mavzu',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -1098,14 +1181,10 @@ class Lectures extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const M3()),
-                        );
+                        navigateToPdfViewer3(context);
                       },
                       child: const Text(
-                        "3-Ma'ruza",
+                        'Kirish',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
