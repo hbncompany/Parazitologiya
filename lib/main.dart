@@ -106,9 +106,7 @@ class AuthProvider with ChangeNotifier {
       _isLoggedIn = false;
     }
 
-    if (storedEmail != null &&
-        storedIsLoggedIn != null &&
-        storedIsLoggedIn) {
+    if (storedEmail != null && storedIsLoggedIn != null && storedIsLoggedIn) {
       _email = storedEmail;
       _isLoggedIn = true;
     } else {
@@ -241,12 +239,18 @@ class MyHomePage extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Salomlar'),
+        title: const Text('P a r a z i t o l o g i y a'),
         centerTitle: true,
         actions: [
-          Center(
-            child: Text(authProvider.username),
-          )
+          IconButton(
+            icon: const Icon(Icons.verified_user_rounded),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => Profilepage()),
+              );
+            },
+          ),
         ],
       ),
       drawer: SizedBox(
@@ -268,11 +272,13 @@ class MyHomePage extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                currentAccountPicture: const Image(image: NetworkImage('https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png')),
+                currentAccountPicture: const Image(
+                    image: NetworkImage(
+                        'https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png')),
               ),
               ListTile(
                 leading: const Icon(
-                  Icons.person,
+                  Icons.verified_user,
                 ),
                 title: const Text('Profile'),
                 onTap: () {
@@ -285,13 +291,13 @@ class MyHomePage extends StatelessWidget {
               ),
               ListTile(
                 leading: const Icon(
-                  Icons.train,
+                  Icons.person,
                 ),
-                title: const Text('Page 2'),
+                title: const Text("O'qituvchi"),
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const MyApp1()),
+                    MaterialPageRoute(builder: (context) => const SecondScreen()),
                   );
                 },
               ),
@@ -306,7 +312,9 @@ class MyHomePage extends StatelessWidget {
                 applicationVersion: '1.0.25',
                 applicationLegalese: '©hbn_company',
                 aboutBoxChildren: [
-                  Image(image: NetworkImage('https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png'))
+                  Image(
+                      image: NetworkImage(
+                          'https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png'))
                 ],
                 child: Text('About app'),
               ),
@@ -314,10 +322,9 @@ class MyHomePage extends StatelessWidget {
           ),
         ),
       ),
-
       body: Column(
         children: [
-          Padding(padding: EdgeInsets.only(top: 5.0)),
+          Padding(padding: EdgeInsets.only(top: 10.0)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -330,11 +337,10 @@ class MyHomePage extends StatelessWidget {
                     MediaQuery.of(context).size.width * containerWidthFraction,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Colors.red,
                   image: DecorationImage(
-                    image: AssetImage('assets/images/unnamed.jpg'),
+                    image: AssetImage('assets/images/Lecture.jpg'),
                     fit: BoxFit.fill,
-                    opacity: 0.1,
+                    opacity: 0.8,
                   ),
                 ),
                 child: TextButton(
@@ -344,7 +350,7 @@ class MyHomePage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => Lectures()),
                     );
                   },
-                  child: TextSection(authProvider.username, 'Travel'),
+                  child: TextSectiontwo('Maruzalar', ''),
                 ),
               ),
               Container(
@@ -369,12 +375,12 @@ class MyHomePage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => Lectures()),
                     );
                   },
-                  child: TextSection('SUMMARY1', 'Travel'),
+                  child: TextSectiontwo('Taqdimot', ''),
                 ),
               )
             ],
           ),
-          Padding(padding: EdgeInsets.only(top: 5.0)),
+          Padding(padding: EdgeInsets.only(top: 25.0)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -387,11 +393,10 @@ class MyHomePage extends StatelessWidget {
                     MediaQuery.of(context).size.width * containerWidthFraction,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Colors.red,
                   image: DecorationImage(
                     image: AssetImage('assets/images/unnamed.jpg'),
                     fit: BoxFit.fill,
-                    opacity: 0.1,
+                    opacity: 0.8,
                   ),
                 ),
                 child: TextButton(
@@ -403,7 +408,7 @@ class MyHomePage extends StatelessWidget {
                   },
                   child: Column(
                     children: [
-                      TextSection('BOOK', 'Travel'),
+                      TextSectiontwo('Laboratoriya', ''),
                     ],
                   ),
                 ),
@@ -430,12 +435,12 @@ class MyHomePage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => Lectures()),
                     );
                   },
-                  child: TextSection('SUMMARY1', 'Travel'),
+                  child: TextSectiontwo('Glossariy', ''),
                 ),
               )
             ],
           ),
-          Padding(padding: EdgeInsets.only(top: 5.0)),
+          Padding(padding: EdgeInsets.only(top: 25.0)),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
@@ -448,11 +453,10 @@ class MyHomePage extends StatelessWidget {
                     MediaQuery.of(context).size.width * containerWidthFraction,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.all(Radius.circular(5)),
-                  color: Colors.red,
                   image: DecorationImage(
                     image: AssetImage('assets/images/unnamed.jpg'),
                     fit: BoxFit.fill,
-                    opacity: 0.1,
+                    opacity: 0.8,
                   ),
                 ),
                 child: TextButton(
@@ -462,7 +466,7 @@ class MyHomePage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => Lectures()),
                     );
                   },
-                  child: TextSection('Lectures', 'Lectures'),
+                  child: TextSectiontwo('Ishchi dastur', ''),
                 ),
               ),
               Container(
@@ -491,7 +495,7 @@ class MyHomePage extends StatelessWidget {
                               )),
                     );
                   },
-                  child: TextSection('QuizApp', 'QuizApp'),
+                  child: TextSectiontwo('Test savollari', ''),
                 ),
               )
             ],
@@ -509,160 +513,19 @@ class SecondScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Kirish. Parazitologiya fanining vazifalari, uning rivojlanishidagi asosiy bosqichlari', style: TextStyle(fontSize: 15),),
-      ),
-      body: Scaffold(
-        body: ListView(children:[Image.asset('assets/images/Merged_document.jpg', fit: BoxFit.scaleDown,)],
+        title: const Text(
+          "O'qituvchi",
+          style: TextStyle(fontSize: 15),
         ),
       ),
-    );
-  }
-}
-
-class M2 extends StatelessWidget {
-  const M2 ({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Tirik organizmlarning o’zaro munosabatlari va uning asosiy shakllari'),
-      ),
       body: Scaffold(
-        body: ListView(children:[Image.asset('assets/images/Glossariy.jpg', fit: BoxFit.scaleDown,)],
-        ),
-      ),
-    );
-  }
-}
-class M3 extends StatelessWidget {
-  const M3 ({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text('Parazit va xo’jayin orasidagi bog’lanishning turli-tuman shakllari'),
-      ),
-      body: Scaffold(
-        body: ListView(children:[Image.asset('assets/images/Glossariy.jpg', fit: BoxFit.scaleDown,)],
-        ),
-      ),
-    );
-  }
-}
-class M4 extends StatelessWidget {
-  const M4 ({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("'Doimiy (stasionar) parazitizm' Doimiy (stasionar) parazitizm"),
-      ),
-      body: Scaffold(
-        body: ListView(children:[Image.asset('assets/images/Glossariy.jpg', fit: BoxFit.scaleDown,)],
-        ),
-      ),
-    );
-  }
-}
-class M5 extends StatelessWidget {
-  const M5 ({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Parazitlarning xo'jayinlari"),
-      ),
-      body: Scaffold(
-        body: ListView(children:[Image.asset('assets/images/Glossariy.jpg', fit: BoxFit.scaleDown,)],
-        ),
-      ),
-    );
-  }
-}
-
-class M6 extends StatelessWidget {
-  const M6 ({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Parazitlarning xo’jayin tanasiga kirishi va undan chiqish yo’llari. Parazitizmning qadimiyligi"),
-      ),
-      body: Scaffold(
-        body: ListView(children:[Image.asset('assets/images/Glossariy.jpg', fit: BoxFit.scaleDown,)],
-        ),
-      ),
-    );
-  }
-}
-
-class M7 extends StatelessWidget {
-  const M7 ({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Parazit va xo’jayin orasidagi munosabatlar. Parazitning xo’jayinga ta’siri"),
-      ),
-      body: Scaffold(
-        body: ListView(children:[Image.asset('assets/images/Glossariy.jpg', fit: BoxFit.scaleDown,)],
-        ),
-      ),
-    );
-  }
-}
-
-class M8 extends StatelessWidget {
-  const M8 ({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Xo’jayinning parazitga ta’siri."),
-      ),
-      body: Scaffold(
-        body: ListView(children:[Image.asset('assets/images/Glossariy.jpg', fit: BoxFit.scaleDown,)],
-        ),
-      ),
-    );
-  }
-}
-
-class M9 extends StatelessWidget {
-  const M9 ({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Parazitlarning tuzilishi va hayot siklidagi adaptasiyalar."),
-      ),
-      body: Scaffold(
-        body: ListView(children:[Image.asset('assets/images/Glossariy.jpeg', fit: BoxFit.scaleDown,)],
-        ),
-      ),
-    );
-  }
-}
-
-class M10 extends StatelessWidget {
-  const M10 ({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Infeksion va invazion kasalliklar", style: TextStyle(fontSize: 15),),
-      ),
-      body: Scaffold(
-        body: ListView(children:[Image.asset('assets/images/Glossariy.jpg', fit: BoxFit.scaleDown,)],
+        body: ListView(
+          children: [
+            Image.asset(
+              'assets/images/Mualliflar.jpg',
+              fit: BoxFit.scaleDown,
+            ),
+          ],
         ),
       ),
     );
@@ -697,83 +560,6 @@ class ThirdScreen extends StatelessWidget {
     );
   }
 }
-
-// class MyStatefulWidget extends StatefulWidget {
-//   const MyStatefulWidget({super.key});
-//
-//   @override
-//   State<MyStatefulWidget> createState() => _MyStatefulWidgetState();
-// }
-//
-// class _MyStatefulWidgetState extends State<MyStatefulWidget> {
-//   static const int _initialPage = 1;
-//   late PdfController _pdfController;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _pdfController = PdfController(
-//       document:
-//           PdfDocument.openData(InternetFile.get('sample/assets/ISORA1.docx')),
-//       initialPage: _initialPage,
-//     );
-//   }
-//
-//   @override
-//   void dispose() {
-//     _pdfController.dispose();
-//     super.dispose();
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text('Flutter PDF Example'),
-//         actions: <Widget>[
-//           IconButton(
-//             icon: const Icon(Icons.navigate_before),
-//             onPressed: () {
-//               _pdfController.previousPage(
-//                 curve: Curves.ease,
-//                 duration: const Duration(milliseconds: 100),
-//               );
-//             },
-//           ),
-//           PdfPageNumber(
-//             controller: _pdfController,
-//             builder: (_, loadingState, page, pagesCount) => Container(
-//               alignment: Alignment.center,
-//               child: Text(
-//                 '$page/${pagesCount ?? 0}',
-//                 style: const TextStyle(fontSize: 22),
-//               ),
-//             ),
-//           ),
-//           IconButton(
-//             icon: const Icon(Icons.navigate_next),
-//             onPressed: () {
-//               _pdfController.nextPage(
-//                 curve: Curves.ease,
-//                 duration: const Duration(milliseconds: 100),
-//               );
-//             },
-//           ),
-//         ],
-//       ),
-//       body: PdfView(
-//         builders: PdfViewBuilders<DefaultBuilderOptions>(
-//           options: const DefaultBuilderOptions(),
-//           documentLoaderBuilder: (_) =>
-//               const Center(child: CircularProgressIndicator()),
-//           pageLoaderBuilder: (_) =>
-//               const Center(child: CircularProgressIndicator()),
-//         ),
-//         controller: _pdfController,
-//       ),
-//     );
-//   }
-// }
 
 class Succes extends StatelessWidget {
   const Succes({super.key});
@@ -851,7 +637,7 @@ class PdfViewerPage extends StatefulWidget {
 }
 
 class _PdfViewerPageState extends State<PdfViewerPage> {
-  late String downloadedFilePath;
+  late String downloadedFilePath = '';
 
   @override
   void initState() {
@@ -881,20 +667,20 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
       ),
       body: downloadedFilePath.isNotEmpty
           ? PDFView(
-        filePath: downloadedFilePath,
-        onRender: (pages) {
-          // Do something when rendering is finished
-        },
-        onError: (error) {
-          print(error);
-        },
-        onPageError: (page, error) {
-          print('$page: $error');
-        },
-      )
+              filePath: downloadedFilePath,
+              onRender: (pages) {
+                // Do something when rendering is finished
+              },
+              onError: (error) {
+                print(error);
+              },
+              onPageError: (page, error) {
+                print('$page: $error');
+              },
+            )
           : Center(
-        child: CircularProgressIndicator(),
-      ),
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 }
@@ -903,7 +689,9 @@ void navigateToPdfViewer(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => PdfViewerPage(pdfUrl: 'https://hbnnarzullayev.pythonanywhere.com/static/pdf/1-Maruza.pdf'),
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Maruza/1-Maruza.pdf'),
     ),
   );
 }
@@ -912,7 +700,9 @@ void navigateToPdfViewer2(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => PdfViewerPage(pdfUrl: 'https://sardorbek95.pythonanywhere.com/Maruza/2-Maruza.pdf'),
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Maruza/2-Maruza.pdf'),
     ),
   );
 }
@@ -921,7 +711,86 @@ void navigateToPdfViewer3(BuildContext context) {
   Navigator.push(
     context,
     MaterialPageRoute(
-      builder: (context) => PdfViewerPage(pdfUrl: 'https://sardorbek95.pythonanywhere.com/Maruza/3-Maruza.pdf'),
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Maruza/3-Maruza.pdf'),
+    ),
+  );
+}
+
+void navigateToPdfViewer4(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Maruza/4-Maruza.pdf'),
+    ),
+  );
+}
+
+void navigateToPdfViewer5(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Maruza/5-Maruza.pdf'),
+    ),
+  );
+}
+
+void navigateToPdfViewer6(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Maruza/6-Maruza.pdf'),
+    ),
+  );
+}
+
+void navigateToPdfViewer7(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Maruza/7-Maruza.pdf'),
+    ),
+  );
+}
+
+void navigateToPdfViewer8(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Maruza/8-Maruza.pdf'),
+    ),
+  );
+}
+
+void navigateToPdfViewer9(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Maruza/9-Maruza.pdf'),
+    ),
+  );
+}
+
+void navigateToPdfViewer10(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Maruza/10-Maruza.pdf'),
     ),
   );
 }
@@ -935,11 +804,13 @@ class Profilepage extends StatefulWidget {
 
 Future<void> fetchScore() async {
   try {
-    final response = await http.get(Uri.parse('https://hbnnarzullayev.pythonanywhere.com/score'));
+    final response = await http
+        .get(Uri.parse('https://hbnnarzullayev.pythonanywhere.com/score'));
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
-      final score = data['score']; // Access the 'score' field in the JSON response
+      final score =
+          data['score']; // Access the 'score' field in the JSON response
       print('Score: $score');
     } else {
       print('Failed to load score. Status code: ${response.statusCode}');
@@ -955,9 +826,9 @@ class _Profilepage extends State<Profilepage> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     authProvider.login(""); // Clear the username
     authProvider.setLoggedInEmail("");
-  void fetchScore() {
-    fetchScore();
-  } // Clear the email
+    void fetchScore() {
+      fetchScore();
+    } // Clear the email
     // You can also perform any additional logout actions here
   }
 
@@ -998,7 +869,9 @@ class _Profilepage extends State<Profilepage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            currentAccountPicture: Container(child: Image.network('https://hbnnarzullayev.pythonanywhere.com/static/Image/${authProvider.username}.jpg')),
+            currentAccountPicture: Container(
+                child: Image.network(
+                    'https://hbnnarzullayev.pythonanywhere.com/static/Image/${authProvider.username}.jpg')),
           ),
           ListTile(
             leading: const Icon(
@@ -1116,7 +989,7 @@ class _MyAppState extends State<MyApp1> {
             icon: Icon(Icons.bookmark_border),
             label: 'Unlearn',
           ),
-        ],  
+        ],
       ),
     );
   }
@@ -1184,7 +1057,7 @@ class Lectures extends StatelessWidget {
                         navigateToPdfViewer3(context);
                       },
                       child: const Text(
-                        'Kirish',
+                        '3-Maruza',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -1199,14 +1072,10 @@ class Lectures extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const M4()),
-                        );
+                        navigateToPdfViewer4(context);
                       },
                       child: const Text(
-                        "4-Ma'ruza",
+                        '4-Maruza',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -1221,14 +1090,10 @@ class Lectures extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const M5()),
-                        );
+                        navigateToPdfViewer5(context);
                       },
                       child: const Text(
-                        "5-Ma'ruza",
+                        '5-Maruza',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -1243,14 +1108,10 @@ class Lectures extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const M6()),
-                        );
+                        navigateToPdfViewer6(context);
                       },
                       child: const Text(
-                        "6-Ma'ruza",
+                        '6-Maruza',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -1265,14 +1126,10 @@ class Lectures extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const M7()),
-                        );
+                        navigateToPdfViewer7(context);
                       },
                       child: const Text(
-                        "7-Ma'ruza",
+                        '7-Maruza',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -1287,14 +1144,10 @@ class Lectures extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const M8()),
-                        );
+                        navigateToPdfViewer8(context);
                       },
                       child: const Text(
-                        "8-Ma'ruza",
+                        '8-Maruza',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -1309,14 +1162,10 @@ class Lectures extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const M9()),
-                        );
+                        navigateToPdfViewer9(context);
                       },
                       child: const Text(
-                        "9-Ma'ruza",
+                        '9-Maruza',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -1331,14 +1180,10 @@ class Lectures extends StatelessWidget {
                     width: MediaQuery.of(context).size.width,
                     child: ElevatedButton(
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const M10()),
-                        );
+                        navigateToPdfViewer10(context);
                       },
                       child: const Text(
-                        "10-Ma'ruza",
+                        '10-Maruza',
                         style: TextStyle(fontSize: 20),
                       ),
                     ),
@@ -1767,7 +1612,9 @@ class QuizQuestion extends StatelessWidget {
     final double containerHeightFraction = 0.15;
     return Column(
       children: [
-        Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height *0.01)),
+        Padding(
+            padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.01)),
         Container(
           height: MediaQuery.of(context).size.height *
               containerHeightFraction *
@@ -1777,7 +1624,8 @@ class QuizQuestion extends StatelessWidget {
             borderRadius: BorderRadius.all(Radius.circular(3)),
             color: Color.fromARGB(255, 54, 171, 244),
           ),
-          padding: EdgeInsets.only(left: MediaQuery.of(context).size.height *0.02),
+          padding:
+              EdgeInsets.only(left: MediaQuery.of(context).size.height * 0.02),
           child: Text(questionText),
         ),
         Column(
@@ -1800,7 +1648,9 @@ class QuizQuestion extends StatelessWidget {
             );
           }).toList(),
         ),
-        Padding(padding: EdgeInsets.only(top: MediaQuery.of(context).size.height *0.55)),
+        Padding(
+            padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.55)),
         Container(
           height: MediaQuery.of(context).size.height *
               containerHeightFraction *
