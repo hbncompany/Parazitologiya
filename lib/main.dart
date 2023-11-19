@@ -300,7 +300,8 @@ class MyHomePage extends StatelessWidget {
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const SecondScreen()),
+                    MaterialPageRoute(
+                        builder: (context) => const SecondScreen()),
                   );
                 },
               ),
@@ -466,7 +467,8 @@ class MyHomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => VideoPlayersScreen()),
+                      MaterialPageRoute(
+                          builder: (context) => VideoPlayersScreen()),
                     );
                   },
                   child: TextSectiontwo('Video darsliklar', ''),
@@ -645,14 +647,28 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
   @override
   void initState() {
     super.initState();
-    downloadFile();
+    checkIfFileExists();
   }
 
-  Future<void> downloadFile() async {
+  Future<void> checkIfFileExists() async {
+    final documentDirectory = await getApplicationDocumentsDirectory();
+    final fileName = _getFileNameFromUrl(widget.pdfUrl);
+    final localFilePath = "${documentDirectory.path}/$fileName";
+
+    if (await File(localFilePath).exists()) {
+      setState(() {
+        downloadedFilePath = localFilePath;
+      });
+    } else {
+      downloadFile(fileName);
+    }
+  }
+
+  Future<void> downloadFile(String fileName) async {
     final response = await http.get(Uri.parse(widget.pdfUrl));
     final documentDirectory = await getApplicationDocumentsDirectory();
 
-    final file = File("${documentDirectory.path}/your_pdf_filename.pdf");
+    final file = File("${documentDirectory.path}/$fileName");
     await file.writeAsBytes(response.bodyBytes);
 
     if (mounted) {
@@ -660,6 +676,11 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
         downloadedFilePath = file.path;
       });
     }
+  }
+
+  String _getFileNameFromUrl(String url) {
+    final uri = Uri.parse(url);
+    return uri.pathSegments.last;
   }
 
   @override
@@ -670,20 +691,20 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
       ),
       body: downloadedFilePath.isNotEmpty
           ? PDFView(
-              filePath: downloadedFilePath,
-              onRender: (pages) {
-                // Do something when rendering is finished
-              },
-              onError: (error) {
-                print(error);
-              },
-              onPageError: (page, error) {
-                print('$page: $error');
-              },
-            )
+        filePath: downloadedFilePath,
+        onRender: (pages) {
+          // Do something when rendering is finished
+        },
+        onError: (error) {
+          print(error);
+        },
+        onPageError: (page, error) {
+          print('$page: $error');
+        },
+      )
           : Center(
-              child: CircularProgressIndicator(),
-            ),
+        child: CircularProgressIndicator(),
+      ),
     );
   }
 }
@@ -1674,94 +1695,6 @@ class QuizQuestion extends StatelessWidget {
   }
 }
 
-// class VideoPlayerScreen extends StatefulWidget {
-//   @override
-//   _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
-// }
-//
-// class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-//   late VideoPlayerController _videoPlayerController;
-//   late ChewieController _chewieController;
-//
-//   @override
-//   void initState() {
-//     super.initState();
-//     _initializeVideo("assets/videos/chochqa.mp4");
-//   }
-//
-//   Future<void> _initializeVideo(String assetPath) async {
-//     // Load the video from assets
-//     final ByteData data = await rootBundle.load(assetPath);
-//     final List<int> bytes = data.buffer.asUint8List();
-//
-//     // Save the video to a temporary file
-//     final tempDir = await getTemporaryDirectory();
-//     final tempFile = await File('${tempDir.path}/chochqa.mp4').writeAsBytes(bytes);
-//
-//     _videoPlayerController = VideoPlayerController.file(tempFile);
-//
-//     await _videoPlayerController.initialize();
-//
-//     _chewieController = ChewieController(
-//       videoPlayerController: _videoPlayerController,
-//       autoPlay: true,
-//       looping: true,
-//     );
-//
-//     setState(() {});
-//   }
-//
-//   @override
-//   void dispose() {
-//     _videoPlayerController.dispose();
-//     _chewieController.dispose();
-//     super.dispose();
-//   }
-//
-//   Widget buildVideoPlayer(String assetPath) {
-//     return FutureBuilder(
-//       future: _initializeVideo(assetPath),
-//       builder: (context, snapshot) {
-//         if (snapshot.connectionState == ConnectionState.done) {
-//           return Container(
-//             height: 200, // Adjust the height as needed
-//             child: Chewie(
-//               controller: _chewieController,
-//             ),
-//           );
-//         } else {
-//           return CircularProgressIndicator();
-//         }
-//       },
-//     );
-//   }
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("Video Player"),
-//       ),
-//       body: Column(
-//         children: [
-//           buildVideoPlayer("assets/videos/chochqa.mp4"),
-//           SizedBox(height: 16),
-//           Text(
-//             "Video Location: assets/videos/1.cho'chqa tasmasimoni.mp4",
-//             style: TextStyle(fontSize: 16),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-//
-// void video() {
-//   runApp(MaterialApp(
-//     home: VideoPlayerScreen(),
-//   ));
-// }
-
 class VideoPlayerView extends StatefulWidget {
   const VideoPlayerView({
     super.key,
@@ -1805,11 +1738,11 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
     _videoPlayerController.initialize().then(
           (_) => setState(
             () => _chewieController = ChewieController(
-          videoPlayerController: _videoPlayerController,
-          aspectRatio: 16 / 9,
-        ),
-      ),
-    );
+              videoPlayerController: _videoPlayerController,
+              aspectRatio: 16 / 9,
+            ),
+          ),
+        );
   }
 
   @override
@@ -1847,63 +1780,76 @@ class VideoPlayersScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Video Players')),
-      body: ListView(
-        padding: const EdgeInsets.all(20),
-        children: const [
-          SizedBox(child: Column(
-            children: [
-              Text("1-Video", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            ],
-          ),),
-          // Local Assets
-          VideoPlayerView(
-            url: 'assets/videos/1-video.mp4',
-            dataSourceType: DataSourceType.asset,
-          ),
-          SizedBox(height: 24),
-          SizedBox(child: Column(
-            children: [
-              Text("2-Video", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            ],
-          ),),
-          VideoPlayerView(
-            url: 'assets/videos/2-video.mp4',
-            dataSourceType: DataSourceType.asset,
-          ),
-          SizedBox(child: Column(
-            children: [
-              Text("3-Video", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            ],
-          ),),
-          VideoPlayerView(
-            url: 'assets/videos/3-video.mp4',
-            dataSourceType: DataSourceType.asset,
-          ),
-          SizedBox(child: Column(
-            children: [
-              Text("4-Video", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            ],
-          ),),
-          VideoPlayerView(
-            url: 'assets/videos/4-video.mp4',
-            dataSourceType: DataSourceType.asset,
-          ),
-          SizedBox(child: Column(
-            children: [
-              Text("Cho'chqa tasmasimoni", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),),
-            ],
-          ),),
-          VideoPlayerView(
-            url: "assets/videos/chochqa.mp4",
-            dataSourceType: DataSourceType.asset,
-          ),
-          // // Network
-          // VideoPlayerView(
-          //   url:
-          //   'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
-          //   dataSourceType: DataSourceType.network,
-          // ),
-        ],
+      body: Container(
+        child: ListView(
+          padding: const EdgeInsets.all(20),
+          children: const [
+            SizedBox(
+              child: Column(
+                children: [
+                  Text(
+                    "1-Video. Cho'chqa tasmasimoni",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            // Local Assets
+            VideoPlayerView(
+              url: 'assets/videos/1-video.mp4',
+              dataSourceType: DataSourceType.asset,
+            ),
+            SizedBox(height: 24),
+            SizedBox(
+              child: Column(
+                children: [
+                  Text(
+                    "2-Video",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            VideoPlayerView(
+              url: 'assets/videos/2-video.mp4',
+              dataSourceType: DataSourceType.asset,
+            ),
+            SizedBox(
+              child: Column(
+                children: [
+                  Text(
+                    "3-Video",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            VideoPlayerView(
+              url: 'assets/videos/3-video.mp4',
+              dataSourceType: DataSourceType.asset,
+            ),
+            SizedBox(
+              child: Column(
+                children: [
+                  Text(
+                    "4-Video",
+                    style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                  ),
+                ],
+              ),
+            ),
+            VideoPlayerView(
+              url: 'assets/videos/4-video.mp4',
+              dataSourceType: DataSourceType.asset,
+            ),
+            // // Network
+            // VideoPlayerView(
+            //   url:
+            //   'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/Sintel.mp4',
+            //   dataSourceType: DataSourceType.network,
+            // ),
+          ],
+        ),
       ),
     );
   }
