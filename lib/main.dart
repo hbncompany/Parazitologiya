@@ -283,7 +283,7 @@ class MyHomePage extends StatelessWidget {
                 leading: const Icon(
                   Icons.verified_user,
                 ),
-                title: const Text('Profile'),
+                title: const Text('Profil'),
                 onTap: () {
                   Navigator.push(
                     context,
@@ -312,7 +312,7 @@ class MyHomePage extends StatelessWidget {
                 applicationIcon: Icon(
                   Icons.person_2_outlined,
                 ),
-                applicationName: 'My Cool App',
+                applicationName: 'Pararitologiya',
                 applicationVersion: '1.0.25',
                 applicationLegalese: '©hbn_company',
                 aboutBoxChildren: [
@@ -376,7 +376,7 @@ class MyHomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Lectures()),
+                      MaterialPageRoute(builder: (context) => Presents()),
                     );
                   },
                   child: TextSectiontwo('Taqdimot', ''),
@@ -407,7 +407,7 @@ class MyHomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Lectures()),
+                      MaterialPageRoute(builder: (context) => Laboratory()),
                     );
                   },
                   child: Column(
@@ -436,7 +436,7 @@ class MyHomePage extends StatelessWidget {
                   onPressed: () {
                     Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => Lectures()),
+                      MaterialPageRoute(builder: (context) => Glossariy()),
                     );
                   },
                   child: TextSectiontwo('Glossariy', ''),
@@ -537,6 +537,32 @@ class SecondScreen extends StatelessWidget {
   }
 }
 
+class Glossariy extends StatelessWidget {
+  const Glossariy({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text(
+          "Glossariy",
+          style: TextStyle(fontSize: 20),
+        ),
+      ),
+      body: Scaffold(
+        body: ListView(
+          children: [
+            Image.asset(
+              'assets/images/Glossariy.jpg',
+              fit: BoxFit.scaleDown,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class ThirdScreen extends StatelessWidget {
   const ThirdScreen({super.key});
 
@@ -599,39 +625,6 @@ class Fail extends StatelessWidget {
   }
 }
 
-// class PdfViewerPage extends StatelessWidget {
-//   final String pdfAsset; // Replace this with your PDF file asset path
-//
-//   PdfViewerPage({required this.pdfAsset});
-//
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text("PDF Viewer"),
-//       ),
-//       body: PDFView(
-//         filePath: pdfAsset,
-//         // Use `filePath` if your PDF is on the device
-//         // Use `asset` if your PDF is in the assets folder
-//         // asset: pdfAsset,
-//         // or
-//         // network: "https://example.com/your.pdf",
-//         // if your PDF is hosted online
-//         onRender: (pages) {
-//           // Do something when rendering is finished
-//         },
-//         onError: (error) {
-//           print(error);
-//         },
-//         onPageError: (page, error) {
-//           print('$page: $error');
-//         },
-//       ),
-//     );
-//   }
-// }
-
 class PdfViewerPage extends StatefulWidget {
   final String pdfUrl;
 
@@ -685,26 +678,27 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
 
   @override
   Widget build(BuildContext context) {
+    final fileName = _getFileNameFromUrl(widget.pdfUrl);
     return Scaffold(
       appBar: AppBar(
-        title: Text("PDF Viewer"),
+        title: Text("$fileName"),
       ),
       body: downloadedFilePath.isNotEmpty
           ? PDFView(
-        filePath: downloadedFilePath,
-        onRender: (pages) {
-          // Do something when rendering is finished
-        },
-        onError: (error) {
-          print(error);
-        },
-        onPageError: (page, error) {
-          print('$page: $error');
-        },
-      )
+              filePath: downloadedFilePath,
+              onRender: (pages) {
+                // Do something when rendering is finished
+              },
+              onError: (error) {
+                print(error);
+              },
+              onPageError: (page, error) {
+                print('$page: $error');
+              },
+            )
           : Center(
-        child: CircularProgressIndicator(),
-      ),
+              child: CircularProgressIndicator(),
+            ),
     );
   }
 }
@@ -819,6 +813,160 @@ void navigateToPdfViewer10(BuildContext context) {
   );
 }
 
+void lab(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya1.pdf'),
+    ),
+  );
+}
+
+void lab2(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya2.pdf'),
+    ),
+  );
+}
+
+void lab3(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya3.pdf'),
+    ),
+  );
+}
+
+void lab4(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya4.pdf'),
+    ),
+  );
+}
+
+void lab5(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya5.pdf'),
+    ),
+  );
+}
+
+void lab6(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya6.pdf'),
+    ),
+  );
+}
+
+void lab7(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya7.pdf'),
+    ),
+  );
+}
+
+void lab8(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya8.pdf'),
+    ),
+  );
+}
+
+void lab9(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya9.pdf'),
+    ),
+  );
+}
+
+void lab10(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya10.pdf'),
+    ),
+  );
+}
+
+void lab11(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya11.pdf'),
+    ),
+  );
+}
+
+void lab12(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya12.pdf'),
+    ),
+  );
+}
+
+void lab13(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya13.pdf'),
+    ),
+  );
+}
+
+void lab14(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => PdfViewerPage(
+          pdfUrl:
+              'https://hbnnarzullayev.pythonanywhere.com/static/pdf/Laboratory/Laboratoriya14.pdf'),
+    ),
+  );
+}
+
 class Profilepage extends StatefulWidget {
   const Profilepage({super.key});
 
@@ -861,7 +1009,7 @@ class _Profilepage extends State<Profilepage> {
     final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Profile Page'),
+        title: const Text('Profil'),
         actions: [
           // Add a logout button to the app bar
           IconButton(
@@ -901,7 +1049,7 @@ class _Profilepage extends State<Profilepage> {
             leading: const Icon(
               Icons.home,
             ),
-            title: const Text('Home'),
+            title: const Text('Bosh sahifa'),
             onTap: () {
               Navigator.push(
                 context,
@@ -925,7 +1073,7 @@ class _Profilepage extends State<Profilepage> {
             leading: const Icon(
               Icons.app_registration,
             ),
-            title: const Text('Registration'),
+            title: const Text("Ro'yxatdan o'tish"),
             onTap: () {
               Navigator.push(
                 context,
@@ -933,24 +1081,6 @@ class _Profilepage extends State<Profilepage> {
                     builder: (context) => const RegistrationPage()),
               );
             },
-          ),
-          const AboutListTile(
-            icon: Icon(
-              Icons.info,
-            ),
-            applicationIcon: Icon(
-              Icons.local_play,
-            ),
-            applicationName: 'My Cool App',
-            applicationVersion: '1.0.25',
-            applicationLegalese: '© 2023 Company',
-            aboutBoxChildren: [],
-            child: TextField(
-              decoration: InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter a search term',
-              ),
-            ),
           ),
         ],
       ),
@@ -1027,7 +1157,7 @@ class Lectures extends StatelessWidget {
     // final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Lectures'),
+        title: const Text("Ma'ruzalar"),
       ),
       body: ListView(
         children: [
@@ -1035,187 +1165,644 @@ class Lectures extends StatelessWidget {
               child: Column(
             children: [
               const Padding(padding: EdgeInsets.only(top: 10.0)),
-              Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        navigateToPdfViewer(context);
-                      },
-                      child: const Text(
-                        'Kirish',
-                        style: TextStyle(fontSize: 20),
-                      ),
+              // Row(
+              //   children: [
+              //     SizedBox(
+              //       height: MediaQuery.of(context).size.height * 0.15,
+              //       width: MediaQuery.of(context).size.width,
+              //       child: ElevatedButton(
+              //         onPressed: () {
+              //           navigateToPdfViewer(context);
+              //         },
+              //         child: const Text(
+              //           'Kirish',
+              //           style: TextStyle(fontSize: 20),
+              //         ),
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
+                color: Colors.blueGrey,
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.chrome_reader_mode,
+                    size: 50,
+                  ),
+                  title: Text(
+                    "Kirish. Parazitologiya fanining vazifalari, uning rivojlanishidagi asosiy bosqichlari",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      textBaseline: TextBaseline.ideographic,
                     ),
                   ),
-                ],
+                  onTap: () {
+                    navigateToPdfViewer(context);
+                  },
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 10.0)),
-              Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        navigateToPdfViewer2(context);
-                      },
-                      child: const Text(
-                        '2-Mavzu',
-                        style: TextStyle(fontSize: 20),
-                      ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
+                color: Colors.blueGrey,
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.chrome_reader_mode,
+                    size: 50,
+                  ),
+                  title: Text(
+                    "Tirik organizmlarning o’zaro munosabatlari va uning asosiy shakllari",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      textBaseline: TextBaseline.ideographic,
                     ),
                   ),
-                ],
+                  onTap: () {
+                    navigateToPdfViewer2(context);
+                  },
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 10.0)),
-              Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        navigateToPdfViewer3(context);
-                      },
-                      child: const Text(
-                        '3-Maruza',
-                        style: TextStyle(fontSize: 20),
-                      ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
+                color: Colors.blueGrey,
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.chrome_reader_mode,
+                    size: 50,
+                  ),
+                  title: Text(
+                    "Parazit va xo’jayin orasidagi bog’lanishning turli-tuman shakllari",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      textBaseline: TextBaseline.ideographic,
                     ),
                   ),
-                ],
+                  onTap: () {
+                    navigateToPdfViewer3(context);
+                  },
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 10.0)),
-              Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        navigateToPdfViewer4(context);
-                      },
-                      child: const Text(
-                        '4-Maruza',
-                        style: TextStyle(fontSize: 20),
-                      ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
+                color: Colors.blueGrey,
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.chrome_reader_mode,
+                    size: 50,
+                  ),
+                  title: Text(
+                    "Doimiy (stasionar) parazitizm",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      textBaseline: TextBaseline.ideographic,
                     ),
                   ),
-                ],
+                  onTap: () {
+                    navigateToPdfViewer4(context);
+                  },
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 10.0)),
-              Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        navigateToPdfViewer5(context);
-                      },
-                      child: const Text(
-                        '5-Maruza',
-                        style: TextStyle(fontSize: 20),
-                      ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
+                color: Colors.blueGrey,
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.chrome_reader_mode,
+                    size: 50,
+                  ),
+                  title: Text(
+                    "Parazitlarning xo’jayinlari",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      textBaseline: TextBaseline.ideographic,
                     ),
                   ),
-                ],
+                  onTap: () {
+                    navigateToPdfViewer5(context);
+                  },
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 10.0)),
-              Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        navigateToPdfViewer6(context);
-                      },
-                      child: const Text(
-                        '6-Maruza',
-                        style: TextStyle(fontSize: 20),
-                      ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
+                color: Colors.blueGrey,
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.chrome_reader_mode,
+                    size: 50,
+                  ),
+                  title: Text(
+                    "Parazitlarning xo’jayin tanasiga kirishi va undan chiqish yo’llari. Parazitizmning qadimiyligi",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      textBaseline: TextBaseline.ideographic,
                     ),
                   ),
-                ],
+                  onTap: () {
+                    navigateToPdfViewer6(context);
+                  },
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 10.0)),
-              Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        navigateToPdfViewer7(context);
-                      },
-                      child: const Text(
-                        '7-Maruza',
-                        style: TextStyle(fontSize: 20),
-                      ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
+                color: Colors.blueGrey,
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.chrome_reader_mode,
+                    size: 50,
+                  ),
+                  title: Text(
+                    "Parazit va xo’jayin orasidagi munosabatlar. Parazitning xo’jayinga ta’siri",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      textBaseline: TextBaseline.ideographic,
                     ),
                   ),
-                ],
+                  onTap: () {
+                    navigateToPdfViewer7(context);
+                  },
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 10.0)),
-              Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        navigateToPdfViewer8(context);
-                      },
-                      child: const Text(
-                        '8-Maruza',
-                        style: TextStyle(fontSize: 20),
-                      ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
+                color: Colors.blueGrey,
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.chrome_reader_mode,
+                    size: 50,
+                  ),
+                  title: Text(
+                    "Xo’jayinning parazitga ta’siri. Tashqi muhit omillarining parazit va xo’jayinga ta’siri",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      textBaseline: TextBaseline.ideographic,
                     ),
                   ),
-                ],
+                  onTap: () {
+                    navigateToPdfViewer8(context);
+                  },
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 10.0)),
-              Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        navigateToPdfViewer9(context);
-                      },
-                      child: const Text(
-                        '9-Maruza',
-                        style: TextStyle(fontSize: 20),
-                      ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
+                color: Colors.blueGrey,
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.chrome_reader_mode,
+                    size: 50,
+                  ),
+                  title: Text(
+                    "Parazitlarning tuzilishi va hayot siklidagi adaptasiyalar",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      textBaseline: TextBaseline.ideographic,
                     ),
                   ),
-                ],
+                  onTap: () {
+                    navigateToPdfViewer9(context);
+                  },
+                ),
               ),
               const Padding(padding: EdgeInsets.only(top: 10.0)),
-              Row(
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        navigateToPdfViewer10(context);
-                      },
-                      child: const Text(
-                        '10-Maruza',
-                        style: TextStyle(fontSize: 20),
-                      ),
+              Container(
+                height: MediaQuery.of(context).size.height * 0.12,
+                color: Colors.blueGrey,
+                child: ListTile(
+                  leading: const Icon(
+                    Icons.chrome_reader_mode,
+                    size: 50,
+                  ),
+                  title: Text(
+                    "Infeksion va invazion kasalliklar. Transmissiv kasalliklar",
+                    textAlign: TextAlign.justify,
+                    style: TextStyle(
+                      fontSize: 18,
+                      textBaseline: TextBaseline.ideographic,
                     ),
                   ),
-                ],
+                  onTap: () {
+                    navigateToPdfViewer10(context);
+                  },
+                ),
               ),
             ],
           )),
+        ],
+      ),
+    );
+  }
+}
+
+class Presents extends StatelessWidget {
+  const Presents({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // final authProvider = Provider.of<AuthProvider>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Taqdimotlar"),
+      ),
+      body: ListView(
+        children: [
+          SafeArea(
+            child: Column(
+              children: [
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.tv,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Ma'ruzalar yuzasidan taqdimotlar",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      navigateToPdfViewer(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.tv,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Laboratoriya yuzasidan taqdimotlar",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      navigateToPdfViewer2(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class Laboratory extends StatelessWidget {
+  const Laboratory({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    // final authProvider = Provider.of<AuthProvider>(context);
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Laboratoriya'),
+      ),
+      body: ListView(
+        children: [
+          SafeArea(
+            child: Column(
+              children: [
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Protozooz kasalliklar. Ichburug’ amyobasi",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Tripanosomalar va leyshmaniyalar. Tuzilish xususiyatlari",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab2(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Qon sporalilari - Haemosporidia. Bezgak parazitlari",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab3(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Chorva hayvonlarini ovqat hazm qilish sistemasida yashovchi parazitlar",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab4(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Nashtarsimon (lansetsimon) va mushuk (sibir) so’rg’ichlilari",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab5(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Qoramol va cho’chqa solityorlarining tuzilish xususiyatlari",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab6(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Keng tasma,  kalta (pakana) zanjir va exinokokklarning tuzilishi",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab7(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Odamning parazit nematodalari. Tuzilishi va hayot sikli",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab8(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Odamning parazit nematodalari. Ostrisa, qilbosh nematoda, trixina",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab9(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "O’simliklarning turli vegetativ a’zolarida va rizosfera tuprog’ida yashovchi fitonematodalar",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab10(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Fitonematodalardan vaqtinchalik va doimiy preparatlar tayyorlash",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab11(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "O’simliklarning parazit nematodalari. Ildiz bo’rtma nematodalari",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab12(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Ektoparazit bo’g’imoyoqlilar. Iksod va mol kanasi",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab13(context);
+                    },
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.12,
+                  color: Colors.blueGrey,
+                  child: ListTile(
+                    leading: const Icon(
+                      Icons.chrome_reader_mode,
+                      size: 50,
+                    ),
+                    title: Text(
+                      "Qon so’ruvchi hasharotlar. Ko’payishi va rivojlanishi",
+                      textAlign: TextAlign.justify,
+                      style: TextStyle(
+                        fontSize: 18,
+                        textBaseline: TextBaseline.ideographic,
+                      ),
+                    ),
+                    onTap: () {
+                      lab14(context);
+                    },
+                  ),
+                ),
+              ],
+            ),
+          ),
         ],
       ),
     );
