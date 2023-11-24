@@ -3,6 +3,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 // import 'package:flutter/services.dart';
 import 'dart:convert';
@@ -133,12 +134,14 @@ class AuthProvider with ChangeNotifier {
         final score = data['last_score'];
         final summscore = data["summ_score"];
         final countscore = data['count_score'];
+        final prefs = await SharedPreferences.getInstance();
+        prefs.setInt('score', score);
 
         // Update the score in the AuthProvider
         setscore(score);
         summsetscore(summscore);
         countsetscore(countscore);
-
+        notifyListeners();
         // Show a success message (optional)
         print('Score updated successfully');
       } else {
@@ -397,7 +400,7 @@ class MyHomePage extends StatelessWidget {
                   applicationIcon: Icon(
                     Icons.person_2_outlined,
                   ),
-                  applicationName: 'Pararitologiya',
+                  applicationName: 'Parazitologiya',
                   applicationVersion: '1.0.25',
                   applicationLegalese: '©hbn_company',
                   aboutBoxChildren: [
@@ -709,10 +712,318 @@ class Succes extends StatelessWidget {
     final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Succesfully logged in!'),
+        title: const Text('Natijalar!'),
+        actions: [
+          // Add a logout button to the app bar
+          IconButton(
+            icon: const Icon(Icons.refresh_outlined),
+            onPressed: () {
+              fetchScore(context); // Call the logout function
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Test natijalari yangilanmoqda!'),
+                ),
+              );
+            },
+          ),
+        ],
       ),
-      body: Center(
-        child: Text(authProvider.username),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Row(
+          children: [
+            const Padding(padding: EdgeInsets.only(right: 3)),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.shade900,
+                      spreadRadius: 5,
+                      blurRadius: 15),
+                ],
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(10),
+                color: Color(0xffefeeee),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    child: Text("Test natijalari", style: TextStyle(color: Colors.blue, fontSize: 25),),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    width: MediaQuery.of(context).size.width * 0.98,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.shade900,
+                            spreadRadius: 5,
+                            blurRadius: 15),
+                      ],
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.only (topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                      color: Color(0xffefeeee),
+                    ),
+                    child: Row(
+                      children: [
+                        const Padding(padding: EdgeInsets.only(left: 10)),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          // width: MediaQuery.of(context).size.width * 0.6,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Oxirgi test natijasi:",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 20,
+                              shadows: [
+                                Shadow(
+                                  color: Color(
+                                      0xff070707), // Choose the color of the shadow
+                                  blurRadius:
+                                  2.0, // Adjust the blur radius for the shadow effect
+                                  offset: Offset(1.5,
+                                      1.5), // Set the horizontal and vertical offset for the shadow
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(left: 30)),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "${authProvider.score} ball",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xff0456ef),
+                              fontSize: 40,
+                              shadows: [
+                                Shadow(
+                                  color: Color(
+                                      0xff070707), // Choose the color of the shadow
+                                  blurRadius:
+                                  2.0, // Adjust the blur radius for the shadow effect
+                                  offset: Offset(1.5,
+                                      1.5), // Set the horizontal and vertical offset for the shadow
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(color: Colors.transparent),
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            color: Colors.blue,
+                            onPressed: () {
+                              fetchScore(context);
+                            },
+                            icon: const Icon(
+                              Icons.refresh,
+                              color: Colors.black45,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(color: Colors.transparent),
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Quiz(
+                                    initialIndex: 0,
+                                    initialScore: 0,
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.directions_walk_outlined,
+                              color: Colors.black45,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.15,
+                    width: MediaQuery.of(context).size.width * 0.98,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.shade900,
+                            spreadRadius: 1,
+                            blurRadius: 15),
+                      ],
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(10),
+                      color: Color(0xffefeeee),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Jami test natijalari:",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 20,
+                            shadows: [
+                              Shadow(
+                                color: Color(
+                                    0xff070707), // Choose the color of the shadow
+                                blurRadius:
+                                2.0, // Adjust the blur radius for the shadow effect
+                                offset: Offset(1.5,
+                                    1.5), // Set the horizontal and vertical offset for the shadow
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(top: 5.0)),
+                        Row(
+                          children: [
+                            Column(
+                              children: [
+                                Container(
+                                    width:
+                                    MediaQuery.of(context).size.width * 0.49,
+                                    child: Text(
+                                      'Urinishlar soni:',
+                                      style: TextStyle(
+                                          color: Colors.blue, fontSize: 18),
+                                      textAlign: TextAlign.center,
+                                    )),
+                                Container(
+                                  child: Text(
+                                    "${authProvider.countscore}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xff0456ef),
+                                      fontSize: 40,
+                                      shadows: [
+                                        Shadow(
+                                          color: Color(
+                                              0xff070707), // Choose the color of the shadow
+                                          blurRadius:
+                                          2.0, // Adjust the blur radius for the shadow effect
+                                          offset: Offset(1.5,
+                                              1.5), // Set the horizontal and vertical offset for the shadow
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                    width:
+                                    MediaQuery.of(context).size.width * 0.49,
+                                    child: Text(
+                                      'Umumiy natija:',
+                                      style: TextStyle(
+                                          color: Colors.blue, fontSize: 18),
+                                      textAlign: TextAlign.center,
+                                    )),
+                                Container(
+                                  child: Text(
+                                    "${authProvider._summscore}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xff0456ef),
+                                      fontSize: 40,
+                                      shadows: [
+                                        Shadow(
+                                          color: Color(
+                                              0xff070707), // Choose the color of the shadow
+                                          blurRadius:
+                                          2.0, // Adjust the blur radius for the shadow effect
+                                          offset: Offset(1.5,
+                                              1.5), // Set the horizontal and vertical offset for the shadow
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 15.0)),
+                  Row(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.shade900,
+                                spreadRadius: 5,
+                                blurRadius: 15),
+                          ],
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.only (topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                          color: Color(0xffefeeee),
+                        ),
+                        child: TextButton(onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                MyHomePage()),
+                          );}, child: Text("Bosh sahifa"),),
+                      ),
+                      const Padding(padding: EdgeInsets.only(left: 8.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.05,
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.shade900,
+                            spreadRadius: 5,
+                            blurRadius: 15),
+                      ],
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.only (topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                      color: Color(0xffefeeee),
+                    ),
+                    child: TextButton(onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Quiz(
+                            initialIndex: 0,
+                            initialScore: 0,
+                          ),
+                        ),
+                      );}, child: Text("Test"),),
+                  ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1412,7 +1723,7 @@ class _Profilepage extends State<Profilepage> {
               fetchScore(context); // Call the logout function
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Test natijalari yangilandi!'),
+                  content: Text('Test natijalari yangilanmoqda!'),
                 ),
               );
             },
@@ -1515,31 +1826,144 @@ class _Profilepage extends State<Profilepage> {
               ),
             ),
             const Padding(padding: EdgeInsets.only(top: 10)),
-            Column(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.1,
-                  width: MediaQuery.of(context).size.width * 0.98,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey.shade900,
-                          spreadRadius: 5,
-                          blurRadius: 15),
-                    ],
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xffefeeee),
+            Container(
+              decoration: BoxDecoration(
+                boxShadow: [
+                  BoxShadow(
+                      color: Colors.grey.shade900,
+                      spreadRadius: 5,
+                      blurRadius: 15),
+                ],
+                shape: BoxShape.rectangle,
+                borderRadius: BorderRadius.circular(10),
+                color: Color(0xffefeeee),
+              ),
+              child: Column(
+                children: [
+                  Container(
+                    child: Text("Test natijalari", style: TextStyle(color: Colors.blue, fontSize: 25),),
                   ),
-                  child: Row(
-                    children: [
-                      const Padding(padding: EdgeInsets.only(left: 10)),
-                      Container(
-                        height: MediaQuery.of(context).size.height * 0.1,
-                        // width: MediaQuery.of(context).size.width * 0.6,
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "Oxirgi test natijasi:",
+                  const Padding(padding: EdgeInsets.only(top: 10)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.1,
+                    width: MediaQuery.of(context).size.width * 0.98,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.shade900,
+                            spreadRadius: 5,
+                            blurRadius: 15),
+                      ],
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.only (topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                      color: Color(0xffefeeee),
+                    ),
+                    child: Row(
+                      children: [
+                        const Padding(padding: EdgeInsets.only(left: 10)),
+                        Container(
+                          height: MediaQuery.of(context).size.height * 0.1,
+                          // width: MediaQuery.of(context).size.width * 0.6,
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "Oxirgi test natijasi:",
+                            style: TextStyle(
+                              color: Colors.blue,
+                              fontSize: 20,
+                              shadows: [
+                                Shadow(
+                                  color: Color(
+                                      0xff070707), // Choose the color of the shadow
+                                  blurRadius:
+                                      2.0, // Adjust the blur radius for the shadow effect
+                                  offset: Offset(1.5,
+                                      1.5), // Set the horizontal and vertical offset for the shadow
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        const Padding(padding: EdgeInsets.only(left: 30)),
+                        Container(
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            "${authProvider.score} ball",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Color(0xff0456ef),
+                              fontSize: 40,
+                              shadows: [
+                                Shadow(
+                                  color: Color(
+                                      0xff070707), // Choose the color of the shadow
+                                  blurRadius:
+                                      2.0, // Adjust the blur radius for the shadow effect
+                                  offset: Offset(1.5,
+                                      1.5), // Set the horizontal and vertical offset for the shadow
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(color: Colors.transparent),
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            color: Colors.blue,
+                            onPressed: () {
+                              fetchScore(context);
+                            },
+                            icon: const Icon(
+                              Icons.refresh,
+                              color: Colors.black45,
+                            ),
+                          ),
+                        ),
+                        Container(
+                          height: 50,
+                          decoration: BoxDecoration(color: Colors.transparent),
+                          alignment: Alignment.centerLeft,
+                          child: IconButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Quiz(
+                                    initialIndex: 0,
+                                    initialScore: 0,
+                                  ),
+                                ),
+                              );
+                            },
+                            icon: const Icon(
+                              Icons.directions_walk_outlined,
+                              color: Colors.black45,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.15,
+                    width: MediaQuery.of(context).size.width * 0.98,
+                    decoration: BoxDecoration(
+                      boxShadow: [
+                        BoxShadow(
+                            color: Colors.grey.shade900,
+                            spreadRadius: 1,
+                            blurRadius: 15),
+                      ],
+                      shape: BoxShape.rectangle,
+                      borderRadius: BorderRadius.circular(10),
+                      color: Color(0xffefeeee),
+                    ),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Jami test natijalari:",
                           style: TextStyle(
                             color: Colors.blue,
                             fontSize: 20,
@@ -1548,162 +1972,89 @@ class _Profilepage extends State<Profilepage> {
                                 color: Color(
                                     0xff070707), // Choose the color of the shadow
                                 blurRadius:
-                                    2.0, // Adjust the blur radius for the shadow effect
+                                2.0, // Adjust the blur radius for the shadow effect
                                 offset: Offset(1.5,
                                     1.5), // Set the horizontal and vertical offset for the shadow
                               ),
                             ],
                           ),
                         ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(left: 40)),
-                      Container(
-                        alignment: Alignment.centerLeft,
-                        child: Text(
-                          "${authProvider.score} ball",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Color(0xff0456ef),
-                            fontSize: 40,
-                            shadows: [
-                              Shadow(
-                                color: Color(
-                                    0xff070707), // Choose the color of the shadow
-                                blurRadius:
-                                    2.0, // Adjust the blur radius for the shadow effect
-                                offset: Offset(1.5,
-                                    1.5), // Set the horizontal and vertical offset for the shadow
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                      Container(
-                        height: 50,
-                        decoration: BoxDecoration(color: Colors.transparent),
-                        alignment: Alignment.centerLeft,
-                        child: IconButton(
-                          onPressed: () {
-                            fetchScore(context);
-                          },
-                          icon: const Icon(
-                            Icons.refresh,
-                            color: Colors.black45,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.only(top: 10.0)),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.15,
-                  width: MediaQuery.of(context).size.width * 0.98,
-                  decoration: BoxDecoration(
-                    boxShadow: [
-                      BoxShadow(
-                          color: Colors.grey.shade900,
-                          spreadRadius: 1,
-                          blurRadius: 15),
-                    ],
-                    shape: BoxShape.rectangle,
-                    borderRadius: BorderRadius.circular(10),
-                    color: Color(0xffefeeee),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Jami test natijalari:",
-                        style: TextStyle(
-                          color: Colors.blue,
-                          fontSize: 20,
-                          shadows: [
-                            Shadow(
-                              color: Color(
-                                  0xff070707), // Choose the color of the shadow
-                              blurRadius:
-                              2.0, // Adjust the blur radius for the shadow effect
-                              offset: Offset(1.5,
-                                  1.5), // Set the horizontal and vertical offset for the shadow
+                        const Padding(padding: EdgeInsets.only(top: 5.0)),
+                        Row(
+                          children: [
+                            Column(
+                              children: [
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.49,
+                                    child: Text(
+                                      'Urinishlar soni:',
+                                      style: TextStyle(
+                                          color: Colors.blue, fontSize: 18),
+                                      textAlign: TextAlign.center,
+                                    )),
+                                Container(
+                                  child: Text(
+                                    "${authProvider.countscore}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xff0456ef),
+                                      fontSize: 40,
+                                      shadows: [
+                                        Shadow(
+                                          color: Color(
+                                              0xff070707), // Choose the color of the shadow
+                                          blurRadius:
+                                              2.0, // Adjust the blur radius for the shadow effect
+                                          offset: Offset(1.5,
+                                              1.5), // Set the horizontal and vertical offset for the shadow
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                            Column(
+                              children: [
+                                Container(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.49,
+                                    child: Text(
+                                      'Umumiy natija:',
+                                      style: TextStyle(
+                                          color: Colors.blue, fontSize: 18),
+                                      textAlign: TextAlign.center,
+                                    )),
+                                Container(
+                                  child: Text(
+                                    "${authProvider._summscore}",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                      color: Color(0xff0456ef),
+                                      fontSize: 40,
+                                      shadows: [
+                                        Shadow(
+                                          color: Color(
+                                              0xff070707), // Choose the color of the shadow
+                                          blurRadius:
+                                              2.0, // Adjust the blur radius for the shadow effect
+                                          offset: Offset(1.5,
+                                              1.5), // Set the horizontal and vertical offset for the shadow
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ),
-                      const Padding(padding: EdgeInsets.only(top: 5.0)),
-                      Row(
-                        children: [
-                          Column(
-                            children: [
-                              Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.44,
-                                  child: Text(
-                                    'Jami topshirilgan:',
-                                    style: TextStyle(
-                                        color: Colors.blue, fontSize: 18),
-                                    textAlign: TextAlign.center,
-                                  )),
-                              Container(
-                                child: Text(
-                                  "${authProvider.countscore}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color(0xff0456ef),
-                                    fontSize: 40,
-                                    shadows: [
-                                      Shadow(
-                                        color: Color(
-                                            0xff070707), // Choose the color of the shadow
-                                        blurRadius:
-                                            2.0, // Adjust the blur radius for the shadow effect
-                                        offset: Offset(1.5,
-                                            1.5), // Set the horizontal and vertical offset for the shadow
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                          Column(
-                            children: [
-                              Container(
-                                  width:
-                                      MediaQuery.of(context).size.width * 0.44,
-                                  child: Text(
-                                    'Umumiy natija:',
-                                    style: TextStyle(
-                                        color: Colors.blue, fontSize: 18),
-                                    textAlign: TextAlign.center,
-                                  )),
-                              Container(
-                                child: Text(
-                                  "${authProvider._summscore}",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    color: Color(0xff0456ef),
-                                    fontSize: 40,
-                                    shadows: [
-                                      Shadow(
-                                        color: Color(
-                                            0xff070707), // Choose the color of the shadow
-                                        blurRadius:
-                                            2.0, // Adjust the blur radius for the shadow effect
-                                        offset: Offset(1.5,
-                                            1.5), // Set the horizontal and vertical offset for the shadow
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ],
         ),
@@ -3083,7 +3434,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registration'),
+        title: const Text("Ro'yxatdan o'tish"),
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -3098,22 +3449,27 @@ class _RegistrationPageState extends State<RegistrationPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              Container(
+                height: 150,
+                child: Image.network(
+                    'https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png'),
+              ),
               TextFormField(
                 controller: usernameController,
-                decoration: const InputDecoration(labelText: 'Username'),
+                decoration: const InputDecoration(labelText: 'Foydalanuvchi nomi'),
               ),
               TextFormField(
                 controller: emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+                decoration: const InputDecoration(labelText: 'Email (Pochta)'),
               ),
               TextFormField(
                 controller: pwdController,
-                decoration: const InputDecoration(labelText: 'Password'),
+                decoration: const InputDecoration(labelText: "Maxfiy so'z (Parol)"),
                 obscureText: true,
               ),
               TextFormField(
                 controller: pwdcController,
-                decoration: const InputDecoration(labelText: 'Repeat password'),
+                decoration: const InputDecoration(labelText: "Maxfiy so'zni takrorlang"),
                 obscureText: true,
               ),
               ElevatedButton(
@@ -3121,7 +3477,7 @@ class _RegistrationPageState extends State<RegistrationPage> {
                   // Call the registration function when the button is pressed
                   registerUser();
                 },
-                child: const Text('Register'),
+                child: const Text("Ro'yxatdan o'tish"),
               ),
             ],
           ),
@@ -3257,80 +3613,91 @@ class _LoginPage extends State<LoginPage> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              TextFormField(
-                controller: usernameController,
-                decoration:
-                    const InputDecoration(labelText: 'Foydalanuvchi nomi'),
-              ),
-              TextFormField(
-                controller: pwdController,
-                decoration:
-                    const InputDecoration(labelText: "Maxfiy so'z (Parol)"),
-                obscureText: true,
-              ),
-              Row(
-                children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height *
-                        containerHeightFraction *
-                        0.25,
-                    width: MediaQuery.of(context).size.width *
-                        containerWidthFraction *
-                        0.65,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Call the registration function when the button is pressed
-                        loginUser();
-                        authProvider.login(username);
-                        authProvider.setLoggedInEmail(email);
-                      },
-                      child: const Text('Kirish'),
+          child: Container(
+            color: Colors.black38,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height *
+                      containerHeightFraction *
+                      1.2,
+                  child: Image.network(
+                      'https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png'),
+                ),
+                const Padding(padding: EdgeInsets.only(left: 9.0)),
+                TextFormField(
+                  controller: usernameController,
+                  decoration:
+                      const InputDecoration(labelText: 'Foydalanuvchi nomi'),
+                ),
+                TextFormField(
+                  controller: pwdController,
+                  decoration:
+                      const InputDecoration(labelText: "Maxfiy so'z (Parol)"),
+                  obscureText: true,
+                ),
+                Row(
+                  children: [
+                    Container(
+                      height: MediaQuery.of(context).size.height *
+                          containerHeightFraction *
+                          0.25,
+                      width: MediaQuery.of(context).size.width *
+                          containerWidthFraction *
+                          1,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Call the registration function when the button is pressed
+                          loginUser();
+                          authProvider.login(username);
+                          authProvider.setLoggedInEmail(email);
+                        },
+                        child: const Text('Kirish'),
+                      ),
                     ),
-                  ),
-                  const Padding(padding: EdgeInsets.only(right: 5.0)),
-                  Container(
-                    height: MediaQuery.of(context).size.height *
-                        containerHeightFraction *
-                        0.25,
-                    width: MediaQuery.of(context).size.width *
-                        containerWidthFraction *
-                        0.65,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const RegistrationPage()),
-                        );
-                      },
-                      child: const Text('Registratsiya'),
+                    const Padding(padding: EdgeInsets.only(left: 9.0)),
+                    Container(
+                      height: MediaQuery.of(context).size.height *
+                          containerHeightFraction *
+                          0.25,
+                      width: MediaQuery.of(context).size.width *
+                          containerWidthFraction *
+                          1,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const RegistrationPage()),
+                          );
+                        },
+                        child: const Text('Registratsiya'),
+                      ),
                     ),
-                  ),
-                  const Padding(padding: EdgeInsets.only(right: 5.0)),
-                  Container(
-                    height: MediaQuery.of(context).size.height *
-                        containerHeightFraction *
-                        0.25,
-                    width: MediaQuery.of(context).size.width *
-                        containerWidthFraction *
-                        0.7,
-                    child: ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => const MyHomePage()),
-                        );
-                      },
-                      child: const Text("Bosh sahifa"),
+                  ],
+                ),
+                    const Padding(padding: EdgeInsets.only(top: 5.0)),
+                    Container(
+                      height: MediaQuery.of(context).size.height *
+                          containerHeightFraction *
+                          0.25,
+                      width: MediaQuery.of(context).size.width *
+                          containerWidthFraction *
+                          0.7,
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => const MyHomePage()),
+                          );
+                        },
+                        child: const Text("Bosh sahifa"),
+                      ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -3391,7 +3758,19 @@ class _QuizState extends State<Quiz> {
     if (currentIndex >= questions.length) {
       return Scaffold(
         appBar: AppBar(
-          title: const Text('Natijalar'),
+          title: const Text('Natija'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.generating_tokens),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Succes()),
+                );
+                },
+            ),
+          ],
         ),
         body: Container(
           decoration: const BoxDecoration(
@@ -3430,6 +3809,18 @@ class _QuizState extends State<Quiz> {
       return Scaffold(
         appBar: AppBar(
           title: const Text('Test savollari'),
+          actions: <Widget>[
+            IconButton(
+              icon: const Icon(Icons.generating_tokens),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const Succes()),
+                );
+                },
+            ),
+          ],
         ),
         body: QuizQuestion(
           questionText: question['question'] as String,
