@@ -98,13 +98,14 @@ class TextSectiontwo extends StatelessWidget {
               _title,
               style: TextStyle(
                   fontFamily: 'Montserrat',
+                  fontWeight: FontWeight.w600,
                   shadows: [
                     Shadow(
                       color: Colors.black, // Choose the color of the shadow
                       blurRadius:
-                      2.0, // Adjust the blur radius for the shadow effect
-                      offset: Offset(2.0,
-                          2.0), // Set the horizontal and vertical offset for the shadow
+                      3.0, // Adjust the blur radius for the shadow effect
+                      offset: Offset(3.0,
+                          3.0), // Set the horizontal and vertical offset for the shadow
                     ),
                   ],
                   fontSize: 22,

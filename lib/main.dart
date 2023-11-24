@@ -15,6 +15,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path_provider/path_provider.dart';
 import 'image_banner.dart';
 import 'text_section.dart';
+import 'circle.dart';
 import 'dart:async';
 // import 'package:flutter_html/flutter_html.dart';
 // import 'package:path_provider/path_provider.dart';
@@ -42,11 +43,48 @@ Future<void> main() async {
 class AuthProvider with ChangeNotifier {
   String _username = "";
   String _email = "";
+  int _score = 0;
+  String _summscore = "";
+  int _countscore = 0;
   bool _isLoggedIn = false;
 
   String get username => _username;
   String get email => _email;
   bool get isLoggedIn => _isLoggedIn;
+  List<int> _quizResults = [];
+  List<int> get quizResults => _quizResults;
+
+  int get score => _score;
+
+  void setscore(int score) {
+    _score = score;
+    notifyListeners();
+    print(score);
+  }
+
+  set score(int _score) {}
+
+  void summsetscore(String summscore) {
+    _summscore = summscore;
+    notifyListeners();
+    print(summscore);
+  }
+
+  set summscore(int _summscore) {}
+
+  int get countscore => _countscore;
+  void countsetscore(int countscore) {
+    _countscore = countscore;
+    notifyListeners();
+    print(countscore);
+  }
+
+  set countscore(int _countscore) {}
+
+  void addQuizResult(int result) {
+    _quizResults.add(result);
+    notifyListeners();
+  }
 
   Future<void> login(String username) async {
     // Perform your login logic here
@@ -60,6 +98,7 @@ class AuthProvider with ChangeNotifier {
     final prefs = await SharedPreferences.getInstance();
     prefs.setString('username', username);
     prefs.setString('email', email);
+    prefs.setInt('score', score);
     prefs.setBool('isLoggedIn', true);
 
     notifyListeners();
@@ -68,6 +107,48 @@ class AuthProvider with ChangeNotifier {
   void setLoggedInEmail(String email) {
     _email = email;
     notifyListeners();
+  }
+
+  // void setscore(int score) {
+  //   _score = score;
+  //   notifyListeners();
+  //   print(score);
+  // }
+  void fetchScore(BuildContext context) async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    await authProvider.refreshScore();
+  }
+
+  Future<void> refreshScore() async {
+    try {
+      // Make an API call to fetch the user's score
+      final response = await http.post(
+        Uri.parse('https://hbnnarzullayev.pythonanywhere.com/userscores'),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode({'nms': _username}),
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = json.decode(response.body);
+        final score = data['last_score'];
+        final summscore = data["summ_score"];
+        final countscore = data['count_score'];
+
+        // Update the score in the AuthProvider
+        setscore(score);
+        summsetscore(summscore);
+        countsetscore(countscore);
+
+        // Show a success message (optional)
+        print('Score updated successfully');
+      } else {
+        // Handle the case where fetching score failed
+        print('Failed to fetch score. Status code: ${response.statusCode}');
+      }
+    } catch (error) {
+      // Handle any other errors that may occur
+      print('Error: $error');
+    }
   }
 
   Future<void> logout() async {
@@ -242,7 +323,7 @@ class MyHomePage extends StatelessWidget {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => Profilepage()),
+                MaterialPageRoute(builder: (context) => const Profilepage()),
               );
             },
           ),
@@ -251,253 +332,289 @@ class MyHomePage extends StatelessWidget {
       drawer: SizedBox(
         width: MediaQuery.of(context).size.width * 0.5,
         child: Drawer(
-          child: ListView(
-            padding: EdgeInsets.zero,
-            children: <Widget>[
-              UserAccountsDrawerHeader(
-                accountName: Text(
-                  authProvider.username,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
+          child: Container(
+            decoration: const BoxDecoration(
+              image: DecorationImage(
+                opacity: 0.2,
+                image: AssetImage(
+                    'assets/images/back.jpg'), // Replace with your image asset path
+                fit: BoxFit.fill,
+              ),
+            ),
+            child: ListView(
+              padding: EdgeInsets.zero,
+              children: <Widget>[
+                UserAccountsDrawerHeader(
+                  decoration: const BoxDecoration(
+                    color: Colors.black38,
                   ),
-                ),
-                accountEmail: Text(
-                  authProvider.email,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
+                  accountName: Text(
+                    authProvider.username,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
+                  accountEmail: Text(
+                    authProvider.email,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  currentAccountPicture: Container(
+                      child: Image.network(
+                          'https://hbnnarzullayev.pythonanywhere.com/static/Image/${authProvider.username}.jpg')),
                 ),
-                currentAccountPicture: const Image(
-                    image: NetworkImage(
-                        'https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png')),
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.verified_user,
+                ListTile(
+                  leading: const Icon(
+                    Icons.verified_user,
+                  ),
+                  title: const Text('Profil'),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const Profilepage()),
+                    );
+                  },
                 ),
-                title: const Text('Profil'),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const Profilepage()),
-                  );
-                },
-              ),
-              ListTile(
-                leading: const Icon(
-                  Icons.person,
+                ListTile(
+                  leading: const Icon(
+                    Icons.person,
+                  ),
+                  title: const Text("O'qituvchi"),
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const SecondScreen()),
+                    );
+                  },
                 ),
-                title: const Text("O'qituvchi"),
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const SecondScreen()),
-                  );
-                },
-              ),
-              const AboutListTile(
-                icon: Icon(
-                  Icons.info,
+                const AboutListTile(
+                  icon: Icon(
+                    Icons.info,
+                  ),
+                  applicationIcon: Icon(
+                    Icons.person_2_outlined,
+                  ),
+                  applicationName: 'Pararitologiya',
+                  applicationVersion: '1.0.25',
+                  applicationLegalese: '©hbn_company',
+                  aboutBoxChildren: [
+                    Image(
+                        image: NetworkImage(
+                            'https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png'))
+                  ],
+                  child: Text('About app'),
                 ),
-                applicationIcon: Icon(
-                  Icons.person_2_outlined,
-                ),
-                applicationName: 'Pararitologiya',
-                applicationVersion: '1.0.25',
-                applicationLegalese: '©hbn_company',
-                aboutBoxChildren: [
-                  Image(
-                      image: NetworkImage(
-                          'https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png'))
-                ],
-                child: Text('About app'),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
-      body: Column(
-        children: [
-          Padding(padding: EdgeInsets.only(top: 10.0)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
-                height: MediaQuery.of(context).size.height *
-                    containerHeightFraction *
-                    1.2,
-                width:
-                    MediaQuery.of(context).size.width * containerWidthFraction,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/Lecture.jpg'),
-                    fit: BoxFit.fill,
-                    opacity: 0.8,
-                  ),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Lectures()),
-                    );
-                  },
-                  child: TextSectiontwo('Maruzalar', ''),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(3, 5, 0, 0),
-                height: MediaQuery.of(context).size.height *
-                    containerHeightFraction *
-                    1.2,
-                width:
-                    MediaQuery.of(context).size.width * containerWidthFraction,
-                decoration: BoxDecoration(
-                  color: Color(0x69027ee5),
-                  // border: Border.all(color: Colors.blue, width: 1),
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/logo-no-background.png'),
-                      fit: BoxFit.fill),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Presents()),
-                    );
-                  },
-                  child: TextSectiontwo('Taqdimot', ''),
-                ),
-              )
-            ],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
           ),
-          Padding(padding: EdgeInsets.only(top: 25.0)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(3, 5, 0, 0),
-                height: MediaQuery.of(context).size.height *
-                    containerHeightFraction *
-                    1.2,
-                width:
-                    MediaQuery.of(context).size.width * containerWidthFraction,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/unnamed.jpg'),
-                    fit: BoxFit.fill,
-                    opacity: 0.8,
-                  ),
+        ),
+        child: ListView(
+          children: [
+            Column(
+              children: [
+                Column(
+                  children: [
+                    const Padding(padding: EdgeInsets.only(top: 10.0)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                          height: MediaQuery.of(context).size.height *
+                              containerHeightFraction *
+                              1.2,
+                          width: MediaQuery.of(context).size.width *
+                              containerWidthFraction,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/Lectures.jpg'),
+                              fit: BoxFit.fill,
+                              opacity: 0.8,
+                            ),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Lectures()),
+                              );
+                            },
+                            child: TextSectiontwo('Maruzalar', ''),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                          height: MediaQuery.of(context).size.height *
+                              containerHeightFraction *
+                              1.2,
+                          width: MediaQuery.of(context).size.width *
+                              containerWidthFraction,
+                          decoration: const BoxDecoration(
+                            color: Color(0x69027ee5),
+                            // border: Border.all(color: Colors.blue, width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            image: DecorationImage(
+                                image: AssetImage('assets/images/present.png'),
+                                fit: BoxFit.fill),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Presents()),
+                              );
+                            },
+                            child: TextSectiontwo('Taqdimot', ''),
+                          ),
+                        )
+                      ],
+                    ),
+                    const Padding(padding: EdgeInsets.only(top: 25.0)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                          height: MediaQuery.of(context).size.height *
+                              containerHeightFraction *
+                              1.2,
+                          width: MediaQuery.of(context).size.width *
+                              containerWidthFraction,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/lab.jpg'),
+                              fit: BoxFit.fill,
+                              opacity: 0.8,
+                            ),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Laboratory()),
+                              );
+                            },
+                            child: Column(
+                              children: [
+                                TextSectiontwo('Laboratoriya', ''),
+                              ],
+                            ),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                          height: MediaQuery.of(context).size.height *
+                              containerHeightFraction *
+                              1.2,
+                          width: MediaQuery.of(context).size.width *
+                              containerWidthFraction,
+                          decoration: const BoxDecoration(
+                            color: Color(0x69027ee5),
+                            // border: Border.all(color: Colors.blue, width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            image: DecorationImage(
+                                image: AssetImage('assets/images/glos.jpg'),
+                                fit: BoxFit.fill),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => const Glossariy()),
+                              );
+                            },
+                            child: TextSectiontwo('Glossariy', ''),
+                          ),
+                        )
+                      ],
+                    ),
+                    const Padding(padding: EdgeInsets.only(top: 25.0)),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                          height: MediaQuery.of(context).size.height *
+                              containerHeightFraction *
+                              1.2,
+                          width: MediaQuery.of(context).size.width *
+                              containerWidthFraction,
+                          decoration: const BoxDecoration(
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            image: DecorationImage(
+                              image: AssetImage('assets/images/video.jpeg'),
+                              fit: BoxFit.fill,
+                              opacity: 0.8,
+                            ),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        const VideoPlayersScreen()),
+                              );
+                            },
+                            child: TextSectiontwo('Video darsliklar', ''),
+                          ),
+                        ),
+                        Container(
+                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                          height: MediaQuery.of(context).size.height *
+                              containerHeightFraction *
+                              1.2,
+                          width: MediaQuery.of(context).size.width *
+                              containerWidthFraction,
+                          decoration: const BoxDecoration(
+                            color: Color(0x69027ee5),
+                            // border: Border.all(color: Colors.blue, width: 1),
+                            borderRadius: BorderRadius.all(Radius.circular(5)),
+                            image: DecorationImage(
+                                image: AssetImage('assets/images/quiz.jpg'),
+                                fit: BoxFit.fill),
+                          ),
+                          child: TextButton(
+                            onPressed: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => Quiz(
+                                    initialIndex: 0,
+                                    initialScore: 0,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: TextSectiontwo('Test savollari', ''),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
                 ),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Laboratory()),
-                    );
-                  },
-                  child: Column(
-                    children: [
-                      TextSectiontwo('Laboratoriya', ''),
-                    ],
-                  ),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(3, 5, 0, 0),
-                height: MediaQuery.of(context).size.height *
-                    containerHeightFraction *
-                    1.2,
-                width:
-                    MediaQuery.of(context).size.width * containerWidthFraction,
-                decoration: BoxDecoration(
-                  color: Color(0x69027ee5),
-                  // border: Border.all(color: Colors.blue, width: 1),
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/logo-no-background.png'),
-                      fit: BoxFit.fill),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Glossariy()),
-                    );
-                  },
-                  child: TextSectiontwo('Glossariy', ''),
-                ),
-              )
-            ],
-          ),
-          Padding(padding: EdgeInsets.only(top: 25.0)),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: [
-              Container(
-                padding: EdgeInsets.fromLTRB(3, 5, 0, 0),
-                height: MediaQuery.of(context).size.height *
-                    containerHeightFraction *
-                    1.2,
-                width:
-                    MediaQuery.of(context).size.width * containerWidthFraction,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/unnamed.jpg'),
-                    fit: BoxFit.fill,
-                    opacity: 0.8,
-                  ),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => VideoPlayersScreen()),
-                    );
-                  },
-                  child: TextSectiontwo('Video darsliklar', ''),
-                ),
-              ),
-              Container(
-                padding: EdgeInsets.fromLTRB(3, 5, 0, 0),
-                height: MediaQuery.of(context).size.height *
-                    containerHeightFraction *
-                    1.2,
-                width:
-                    MediaQuery.of(context).size.width * containerWidthFraction,
-                decoration: BoxDecoration(
-                  color: Color(0x69027ee5),
-                  // border: Border.all(color: Colors.blue, width: 1),
-                  borderRadius: BorderRadius.all(Radius.circular(5)),
-                  image: DecorationImage(
-                      image: AssetImage('assets/images/logo-no-background.png'),
-                      fit: BoxFit.fill),
-                ),
-                child: TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Quiz(
-                                initialIndex: 0,
-                                initialScore: 0,
-                              )),
-                    );
-                  },
-                  child: TextSectiontwo('Test savollari', ''),
-                ),
-              )
-            ],
-          ),
-        ],
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -688,7 +805,7 @@ class _PdfViewerPageState extends State<PdfViewerPage> {
                 print('$page: $error');
               },
             )
-          : Center(
+          : const Center(
               child: CircularProgressIndicator(),
             ),
     );
@@ -1230,18 +1347,41 @@ class Profilepage extends StatefulWidget {
   State<Profilepage> createState() => _Profilepage();
 }
 
-Future<void> fetchScore() async {
+Future<void> fetchScore(BuildContext context) async {
+  final authProvider = Provider.of<AuthProvider>(context, listen: false);
   try {
-    final response = await http
-        .get(Uri.parse('https://hbnnarzullayev.pythonanywhere.com/score'));
+    final url =
+        Uri.parse('https://hbnnarzullayev.pythonanywhere.com/userscores');
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'nms': authProvider.username,
+      }),
+    );
 
     if (response.statusCode == 200) {
       final Map<String, dynamic> data = json.decode(response.body);
-      final score =
-          data['score']; // Access the 'score' field in the JSON response
-      print('Score: $score');
+      int score = data['last_score'];
+      final summscore = data['summ_score'];
+      final countscore = data['count_score'];
+
+      SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('userToken', 'your_token_here');
+
+      // Update the authProvider here
+      authProvider.fetchScore(context);
+      authProvider.setscore(score);
+
+      // Show a success message
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Muvaffaqqiyatli yangilandi!'),
+        ),
+      );
     } else {
-      print('Failed to load score. Status code: ${response.statusCode}');
+      print(
+          'Xato. Internet yoq yoki test topshirilmagan: ${response.statusCode}');
     }
   } catch (error) {
     print('Error: $error');
@@ -1254,9 +1394,7 @@ class _Profilepage extends State<Profilepage> {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
     authProvider.login(""); // Clear the username
     authProvider.setLoggedInEmail("");
-    void fetchScore() {
-      fetchScore();
-    } // Clear the email
+    authProvider.setscore(0);
     // You can also perform any additional logout actions here
   }
 
@@ -1269,76 +1407,306 @@ class _Profilepage extends State<Profilepage> {
         actions: [
           // Add a logout button to the app bar
           IconButton(
-            icon: const Icon(Icons.logout),
+            icon: const Icon(Icons.refresh_outlined),
             onPressed: () {
-              logoutUser(); // Call the logout function
+              fetchScore(context); // Call the logout function
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(
-                  content: Text('Muvaffaqqiyatli chiqish!'),
+                  content: Text('Test natijalari yangilandi!'),
                 ),
               );
             },
           ),
         ],
       ),
-      body: ListView(
-        padding: EdgeInsets.zero,
-        children: [
-          UserAccountsDrawerHeader(
-            accountName: Text(
-              authProvider.username,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: [UserAccountsDrawerHeader(
+                decoration: const BoxDecoration(
+                  color: Colors.black38,
+                ),
+                accountName: Text(
+                  authProvider.username,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                accountEmail: Text(
+                  authProvider.email,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                currentAccountPicture:
+                    Container(
+                      child: Image.network(
+                          'https://hbnnarzullayev.pythonanywhere.com/static/Image/${authProvider.username}.jpg'),
+                    ),
+              ),
+            Container(
+              decoration: BoxDecoration(color: Colors.black38),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.home,
+                ),
+                title: const Text("Bosh sahifa"),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const MyHomePage()),
+                  );
+                },
               ),
             ),
-            accountEmail: Text(
-              authProvider.email,
-              style: const TextStyle(
-                fontWeight: FontWeight.bold,
+            Container(
+              decoration: BoxDecoration(color: Colors.black38),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.login,
+                ),
+                title: Text('Kirish'),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
               ),
             ),
-            currentAccountPicture: Container(
-                child: Image.network(
-                    'https://hbnnarzullayev.pythonanywhere.com/static/Image/${authProvider.username}.jpg')),
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.home,
+            Container(
+              decoration: BoxDecoration(color: Colors.black38),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.logout,
+                ),
+                title: Text('Chiqish'),
+                onTap: () {
+                  logoutUser(); // Call the logout function
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Muvaffaqqiyatli chiqish!'),
+                    ),
+                  );
+                },
+              ),
             ),
-            title: const Text('Bosh sahifa'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MyHomePage()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.login,
+            Container(
+              decoration: BoxDecoration(color: Colors.black38),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.app_registration,
+                ),
+                title: const Text("Ro'yxatdan o'tish"),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => const RegistrationPage()),
+                  );
+                },
+              ),
             ),
-            title: const Text('Login'),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const LoginPage()),
-              );
-            },
-          ),
-          ListTile(
-            leading: const Icon(
-              Icons.app_registration,
+            const Padding(padding: EdgeInsets.only(top: 10)),
+            Column(
+              children: [
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  width: MediaQuery.of(context).size.width * 0.98,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.shade900,
+                          spreadRadius: 5,
+                          blurRadius: 15),
+                    ],
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0xffefeeee),
+                  ),
+                  child: Row(
+                    children: [
+                      const Padding(padding: EdgeInsets.only(left: 10)),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.1,
+                        // width: MediaQuery.of(context).size.width * 0.6,
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "Oxirgi test natijasi:",
+                          style: TextStyle(
+                            color: Colors.blue,
+                            fontSize: 20,
+                            shadows: [
+                              Shadow(
+                                color: Color(
+                                    0xff070707), // Choose the color of the shadow
+                                blurRadius:
+                                    2.0, // Adjust the blur radius for the shadow effect
+                                offset: Offset(1.5,
+                                    1.5), // Set the horizontal and vertical offset for the shadow
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      const Padding(padding: EdgeInsets.only(left: 40)),
+                      Container(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          "${authProvider.score} ball",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Color(0xff0456ef),
+                            fontSize: 40,
+                            shadows: [
+                              Shadow(
+                                color: Color(
+                                    0xff070707), // Choose the color of the shadow
+                                blurRadius:
+                                    2.0, // Adjust the blur radius for the shadow effect
+                                offset: Offset(1.5,
+                                    1.5), // Set the horizontal and vertical offset for the shadow
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                      Container(
+                        height: 50,
+                        decoration: BoxDecoration(color: Colors.transparent),
+                        alignment: Alignment.centerLeft,
+                        child: IconButton(
+                          onPressed: () {
+                            fetchScore(context);
+                          },
+                          icon: const Icon(
+                            Icons.refresh,
+                            color: Colors.black45,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                const Padding(padding: EdgeInsets.only(top: 10.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.15,
+                  width: MediaQuery.of(context).size.width * 0.98,
+                  decoration: BoxDecoration(
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.grey.shade900,
+                          spreadRadius: 1,
+                          blurRadius: 15),
+                    ],
+                    shape: BoxShape.rectangle,
+                    borderRadius: BorderRadius.circular(10),
+                    color: Color(0xffefeeee),
+                  ),
+                  child: Column(
+                    children: [
+                      Text(
+                        "Jami test natijalari:",
+                        style: TextStyle(
+                          color: Colors.blue,
+                          fontSize: 20,
+                          shadows: [
+                            Shadow(
+                              color: Color(
+                                  0xff070707), // Choose the color of the shadow
+                              blurRadius:
+                              2.0, // Adjust the blur radius for the shadow effect
+                              offset: Offset(1.5,
+                                  1.5), // Set the horizontal and vertical offset for the shadow
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Padding(padding: EdgeInsets.only(top: 5.0)),
+                      Row(
+                        children: [
+                          Column(
+                            children: [
+                              Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.44,
+                                  child: Text(
+                                    'Jami topshirilgan:',
+                                    style: TextStyle(
+                                        color: Colors.blue, fontSize: 18),
+                                    textAlign: TextAlign.center,
+                                  )),
+                              Container(
+                                child: Text(
+                                  "${authProvider.countscore}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Color(0xff0456ef),
+                                    fontSize: 40,
+                                    shadows: [
+                                      Shadow(
+                                        color: Color(
+                                            0xff070707), // Choose the color of the shadow
+                                        blurRadius:
+                                            2.0, // Adjust the blur radius for the shadow effect
+                                        offset: Offset(1.5,
+                                            1.5), // Set the horizontal and vertical offset for the shadow
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Column(
+                            children: [
+                              Container(
+                                  width:
+                                      MediaQuery.of(context).size.width * 0.44,
+                                  child: Text(
+                                    'Umumiy natija:',
+                                    style: TextStyle(
+                                        color: Colors.blue, fontSize: 18),
+                                    textAlign: TextAlign.center,
+                                  )),
+                              Container(
+                                child: Text(
+                                  "${authProvider._summscore}",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    color: Color(0xff0456ef),
+                                    fontSize: 40,
+                                    shadows: [
+                                      Shadow(
+                                        color: Color(
+                                            0xff070707), // Choose the color of the shadow
+                                        blurRadius:
+                                            2.0, // Adjust the blur radius for the shadow effect
+                                        offset: Offset(1.5,
+                                            1.5), // Set the horizontal and vertical offset for the shadow
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            title: const Text("Ro'yxatdan o'tish"),
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => const RegistrationPage()),
-              );
-            },
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -1446,7 +1814,7 @@ class Lectures extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Kirish. Parazitologiya fanining vazifalari, uning rivojlanishidagi asosiy bosqichlari",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1468,7 +1836,7 @@ class Lectures extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Tirik organizmlarning o’zaro munosabatlari va uning asosiy shakllari",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1490,7 +1858,7 @@ class Lectures extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Parazit va xo’jayin orasidagi bog’lanishning turli-tuman shakllari",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1512,7 +1880,7 @@ class Lectures extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Doimiy (stasionar) parazitizm",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1534,7 +1902,7 @@ class Lectures extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Parazitlarning xo’jayinlari",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1556,7 +1924,7 @@ class Lectures extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Parazitlarning xo’jayin tanasiga kirishi va undan chiqish yo’llari. Parazitizmning qadimiyligi",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1578,7 +1946,7 @@ class Lectures extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Parazit va xo’jayin orasidagi munosabatlar. Parazitning xo’jayinga ta’siri",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1600,7 +1968,7 @@ class Lectures extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Xo’jayinning parazitga ta’siri. Tashqi muhit omillarining parazit va xo’jayinga ta’siri",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1622,7 +1990,7 @@ class Lectures extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Parazitlarning tuzilishi va hayot siklidagi adaptasiyalar",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1644,7 +2012,7 @@ class Lectures extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Infeksion va invazion kasalliklar. Transmissiv kasalliklar",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1675,65 +2043,74 @@ class Presents extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Taqdimotlar"),
       ),
-      body: ListView(
-        children: [
-          SafeArea(
-            child: Column(
-              children: [
-                const Padding(padding: EdgeInsets.only(top: 10.0)),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.12,
-                  color: Colors.blueGrey,
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.tv,
-                      size: 50,
-                    ),
-                    title: Text(
-                      "Ma'ruzalar yuzasidan taqdimotlar",
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        fontSize: 18,
-                        textBaseline: TextBaseline.ideographic,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LecturesP()),
-                      );
-                    },
-                  ),
-                ),
-                const Padding(padding: EdgeInsets.only(top: 10.0)),
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.12,
-                  color: Colors.blueGrey,
-                  child: ListTile(
-                    leading: const Icon(
-                      Icons.tv,
-                      size: 50,
-                    ),
-                    title: Text(
-                      "Laboratoriya yuzasidan taqdimotlar",
-                      textAlign: TextAlign.justify,
-                      style: TextStyle(
-                        fontSize: 18,
-                        textBaseline: TextBaseline.ideographic,
-                      ),
-                    ),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => LaboratoryP()),
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
           ),
-        ],
+        ),
+        child: ListView(
+          children: [
+            SafeArea(
+              child: Column(
+                children: [
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.tv,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Ma'ruzalar yuzasidan taqdimotlar",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PDFapp()),
+                        );
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.tv,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Laboratoriya yuzasidan taqdimotlar",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => PDFlabapp()),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -1763,7 +2140,7 @@ class LecturesP extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Kirish. Parazitologiya fanining vazifalari, uning rivojlanishidagi asosiy bosqichlari",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1785,7 +2162,7 @@ class LecturesP extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Tirik organizmlarning o’zaro munosabatlari va uning asosiy shakllari",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1807,7 +2184,7 @@ class LecturesP extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Parazit va xo’jayin orasidagi bog’lanishning turli-tuman shakllari",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1832,7 +2209,7 @@ class LecturesP extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Doimiy (stasionar) parazitizm",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1854,7 +2231,7 @@ class LecturesP extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Parazitlarning xo’jayinlari",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1876,7 +2253,7 @@ class LecturesP extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Parazitlarning xo’jayin tanasiga kirishi va undan chiqish yo’llari. Parazitizmning qadimiyligi",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1898,7 +2275,7 @@ class LecturesP extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Parazit va xo’jayin orasidagi munosabatlar. Parazitning xo’jayinga ta’siri",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1920,7 +2297,7 @@ class LecturesP extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Xo’jayinning parazitga ta’siri. Tashqi muhit omillarining parazit va xo’jayinga ta’siri",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1942,7 +2319,7 @@ class LecturesP extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Parazitlarning tuzilishi va hayot siklidagi adaptasiyalar",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -1964,7 +2341,7 @@ class LecturesP extends StatelessWidget {
                     Icons.chrome_reader_mode,
                     size: 50,
                   ),
-                  title: Text(
+                  title: const Text(
                     "Infeksion va invazion kasalliklar. Transmissiv kasalliklar",
                     textAlign: TextAlign.justify,
                     style: TextStyle(
@@ -2009,7 +2386,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Protozooz kasalliklar. Ichburug’ amyobasi",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2031,7 +2408,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Tripanosomalar va leyshmaniyalar. Tuzilish xususiyatlari",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2053,7 +2430,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Qon sporalilari - Haemosporidia. Bezgak parazitlari",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2075,7 +2452,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Chorva hayvonlarini ovqat hazm qilish sistemasida yashovchi parazitlar",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2097,7 +2474,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Nashtarsimon (lansetsimon) va mushuk (sibir) so’rg’ichlilari",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2119,7 +2496,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Qoramol va cho’chqa solityorlarining tuzilish xususiyatlari",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2141,7 +2518,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Keng tasma,  kalta (pakana) zanjir va exinokokklarning tuzilishi",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2163,7 +2540,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Odamning parazit nematodalari. Tuzilishi va hayot sikli",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2185,7 +2562,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Odamning parazit nematodalari. Ostrisa, qilbosh nematoda, trixina",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2207,7 +2584,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "O’simliklarning turli vegetativ a’zolarida va rizosfera tuprog’ida yashovchi fitonematodalar",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2229,7 +2606,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Fitonematodalardan vaqtinchalik va doimiy preparatlar tayyorlash",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2251,7 +2628,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "O’simliklarning parazit nematodalari. Ildiz bo’rtma nematodalari",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2273,7 +2650,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Ektoparazit bo’g’imoyoqlilar. Iksod va mol kanasi",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2295,7 +2672,7 @@ class LaboratoryP extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Qon so’ruvchi hasharotlar. Ko’payishi va rivojlanishi",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2341,7 +2718,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Protozooz kasalliklar. Ichburug’ amyobasi",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2363,7 +2740,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Tripanosomalar va leyshmaniyalar. Tuzilish xususiyatlari",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2385,7 +2762,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Qon sporalilari - Haemosporidia. Bezgak parazitlari",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2407,7 +2784,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Chorva hayvonlarini ovqat hazm qilish sistemasida yashovchi parazitlar",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2429,7 +2806,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Nashtarsimon (lansetsimon) va mushuk (sibir) so’rg’ichlilari",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2451,7 +2828,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Qoramol va cho’chqa solityorlarining tuzilish xususiyatlari",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2473,7 +2850,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Keng tasma,  kalta (pakana) zanjir va exinokokklarning tuzilishi",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2495,7 +2872,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Odamning parazit nematodalari. Tuzilishi va hayot sikli",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2517,7 +2894,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Odamning parazit nematodalari. Ostrisa, qilbosh nematoda, trixina",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2539,7 +2916,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "O’simliklarning turli vegetativ a’zolarida va rizosfera tuprog’ida yashovchi fitonematodalar",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2561,7 +2938,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Fitonematodalardan vaqtinchalik va doimiy preparatlar tayyorlash",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2583,7 +2960,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "O’simliklarning parazit nematodalari. Ildiz bo’rtma nematodalari",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2605,7 +2982,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Ektoparazit bo’g’imoyoqlilar. Iksod va mol kanasi",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2627,7 +3004,7 @@ class Laboratory extends StatelessWidget {
                       Icons.chrome_reader_mode,
                       size: 50,
                     ),
-                    title: Text(
+                    title: const Text(
                       "Qon so’ruvchi hasharotlar. Ko’payishi va rivojlanishi",
                       textAlign: TextAlign.justify,
                       style: TextStyle(
@@ -2684,16 +3061,19 @@ class _RegistrationPageState extends State<RegistrationPage> {
 
     if (response.statusCode == 200) {
       // Registration successful, handle the response
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const LoginPage()),
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text("Muvaffaqqiyatli ro'yxatdan o'tish!"),
+        ),
       );
       // You can parse and use the response data here
     } else {
       // Registration failed, handle the error
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const Fail()),
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Login yoki parol xato'),
+        ),
       );
       // Handle error responses here
     }
@@ -2705,37 +3085,46 @@ class _RegistrationPageState extends State<RegistrationPage> {
       appBar: AppBar(
         title: const Text('Registration'),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextFormField(
-              controller: usernameController,
-              decoration: const InputDecoration(labelText: 'Username'),
-            ),
-            TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            TextFormField(
-              controller: pwdController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            TextFormField(
-              controller: pwdcController,
-              decoration: const InputDecoration(labelText: 'Repeat password'),
-              obscureText: true,
-            ),
-            ElevatedButton(
-              onPressed: () {
-                // Call the registration function when the button is pressed
-                registerUser();
-              },
-              child: const Text('Register'),
-            ),
-          ],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: usernameController,
+                decoration: const InputDecoration(labelText: 'Username'),
+              ),
+              TextFormField(
+                controller: emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+              ),
+              TextFormField(
+                controller: pwdController,
+                decoration: const InputDecoration(labelText: 'Password'),
+                obscureText: true,
+              ),
+              TextFormField(
+                controller: pwdcController,
+                decoration: const InputDecoration(labelText: 'Repeat password'),
+                obscureText: true,
+              ),
+              ElevatedButton(
+                onPressed: () {
+                  // Call the registration function when the button is pressed
+                  registerUser();
+                },
+                child: const Text('Register'),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -2832,7 +3221,10 @@ class _LoginPage extends State<LoginPage> {
     final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('Login $username'),
+        // backgroundColor:Colors.red,
+        foregroundColor: Colors.blue,
+        bottomOpacity: 0.1,
+        title: Text('Kirish... $username'),
         actions: [
           // Add a logout button to the app bar
           IconButton(
@@ -2855,80 +3247,91 @@ class _LoginPage extends State<LoginPage> {
           ),
         ],
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            TextFormField(
-              controller: usernameController,
-              decoration: const InputDecoration(labelText: 'Username'),
-            ),
-            TextFormField(
-              controller: pwdController,
-              decoration: const InputDecoration(labelText: 'Password'),
-              obscureText: true,
-            ),
-            Row(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height *
-                      containerHeightFraction *
-                      0.25,
-                  width: MediaQuery.of(context).size.width *
-                      containerWidthFraction *
-                      0.6,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      // Call the registration function when the button is pressed
-                      loginUser();
-                      authProvider.login(username);
-                      authProvider.setLoggedInEmail(email);
-                    },
-                    child: const Text('Login'),
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              TextFormField(
+                controller: usernameController,
+                decoration:
+                    const InputDecoration(labelText: 'Foydalanuvchi nomi'),
+              ),
+              TextFormField(
+                controller: pwdController,
+                decoration:
+                    const InputDecoration(labelText: "Maxfiy so'z (Parol)"),
+                obscureText: true,
+              ),
+              Row(
+                children: [
+                  Container(
+                    height: MediaQuery.of(context).size.height *
+                        containerHeightFraction *
+                        0.25,
+                    width: MediaQuery.of(context).size.width *
+                        containerWidthFraction *
+                        0.65,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        // Call the registration function when the button is pressed
+                        loginUser();
+                        authProvider.login(username);
+                        authProvider.setLoggedInEmail(email);
+                      },
+                      child: const Text('Kirish'),
+                    ),
                   ),
-                ),
-                Padding(padding: EdgeInsets.only(right: 5.0)),
-                Container(
-                  height: MediaQuery.of(context).size.height *
-                      containerHeightFraction *
-                      0.25,
-                  width: MediaQuery.of(context).size.width *
-                      containerWidthFraction *
-                      0.6,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const RegistrationPage()),
-                      );
-                    },
-                    child: const Text('Register'),
+                  const Padding(padding: EdgeInsets.only(right: 5.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height *
+                        containerHeightFraction *
+                        0.25,
+                    width: MediaQuery.of(context).size.width *
+                        containerWidthFraction *
+                        0.65,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const RegistrationPage()),
+                        );
+                      },
+                      child: const Text('Registratsiya'),
+                    ),
                   ),
-                ),
-                Padding(padding: EdgeInsets.only(right: 5.0)),
-                Container(
-                  height: MediaQuery.of(context).size.height *
-                      containerHeightFraction *
-                      0.25,
-                  width: MediaQuery.of(context).size.width *
-                      containerWidthFraction *
-                      0.6,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                            builder: (context) => const MyHomePage()),
-                      );
-                    },
-                    child: const Text("Bosh sahifa"),
+                  const Padding(padding: EdgeInsets.only(right: 5.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height *
+                        containerHeightFraction *
+                        0.25,
+                    width: MediaQuery.of(context).size.width *
+                        containerWidthFraction *
+                        0.7,
+                    child: ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const MyHomePage()),
+                        );
+                      },
+                      child: const Text("Bosh sahifa"),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -2990,18 +3393,33 @@ class _QuizState extends State<Quiz> {
         appBar: AppBar(
           title: const Text('Natijalar'),
         ),
-        body: Center(
-          child: Column(
-            children: [
-              TextSectionone('Test tugadi, Sizning ballingiz: $score'),
-              ElevatedButton(
-                onPressed: () {
-                  sendQuizResults(score,
-                      authProvider.username); // Use authProvider.username here
-                },
-                child: Text('Javobni tasdiqlash'),
-              ),
-            ],
+        body: Container(
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage(
+                  'assets/images/back.jpg'), // Replace with your image asset path
+              fit: BoxFit.fill,
+            ),
+          ),
+          child: Center(
+            child: Column(
+              children: [
+                Container(
+                  decoration: BoxDecoration(color: Colors.black38),
+                  child:
+                      TextSection('Test tugadi, Sizning ballingiz: $score', ''),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    sendQuizResults(
+                        score,
+                        authProvider
+                            .username); // Use authProvider.username here
+                  },
+                  child: const Text('Javobni tasdiqlash'),
+                ),
+              ],
+            ),
           ),
         ),
       );
@@ -3011,7 +3429,7 @@ class _QuizState extends State<Quiz> {
       final String correctAnswer = question['correct_answer'] as String;
       return Scaffold(
         appBar: AppBar(
-          title: Text('Test savollari'),
+          title: const Text('Test savollari'),
         ),
         body: QuizQuestion(
           questionText: question['question'] as String,
@@ -3061,63 +3479,72 @@ class QuizQuestion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double containerHeightFraction = 0.15;
-    return Column(
-      children: [
-        Padding(
-            padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.01)),
-        Container(
-          height: MediaQuery.of(context).size.height *
-              containerHeightFraction *
-              0.4,
-          width: MediaQuery.of(context).size.width,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.all(Radius.circular(3)),
-            color: Color.fromARGB(255, 54, 171, 244),
-          ),
-          padding:
-              EdgeInsets.only(left: MediaQuery.of(context).size.height * 0.02),
-          child: Text(questionText),
+    return Container(
+      decoration: const BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage(
+              'assets/images/back.jpg'), // Replace with your image asset path
+          fit: BoxFit.fill,
         ),
-        Column(
-          children: choices.map((answer) {
-            return ElevatedButton(
-              onPressed: () {
-                onAnswer(answer == correctAnswer);
-              },
-              child: Container(
-                alignment: Alignment.centerLeft,
-                height: MediaQuery.of(context).size.height *
-                    containerHeightFraction *
-                    0.4,
-                width: MediaQuery.of(context).size.width,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.all(Radius.circular(3)),
+      ),
+      child: Column(
+        children: [
+          Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.01)),
+          Container(
+            height: MediaQuery.of(context).size.height *
+                containerHeightFraction *
+                0.5,
+            width: MediaQuery.of(context).size.width,
+            decoration: const BoxDecoration(
+              borderRadius: BorderRadius.all(Radius.circular(3)),
+              color: Colors.black26,
+            ),
+            padding: EdgeInsets.only(
+                left: MediaQuery.of(context).size.height * 0.02),
+            child: Text(questionText),
+          ),
+          Column(
+            children: choices.map((answer) {
+              return ElevatedButton(
+                onPressed: () {
+                  onAnswer(answer == correctAnswer);
+                },
+                child: Container(
+                  alignment: Alignment.centerLeft,
+                  height: MediaQuery.of(context).size.height *
+                      containerHeightFraction *
+                      0.4,
+                  width: MediaQuery.of(context).size.width,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(3)),
+                  ),
+                  child: Text(answer),
                 ),
-                child: Text(answer),
-              ),
-            );
-          }).toList(),
-        ),
-        Padding(
-            padding: EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * 0.55)),
-        Container(
-          height: MediaQuery.of(context).size.height *
-              containerHeightFraction *
-              0.25,
-          width: MediaQuery.of(context).size.width,
-          child: ElevatedButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const MyHomePage()),
               );
-            },
-            child: const Text("Bosh sahifa"),
+            }).toList(),
           ),
-        ),
-      ],
+          Padding(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height * 0.45)),
+          Container(
+            height: MediaQuery.of(context).size.height *
+                containerHeightFraction *
+                0.25,
+            width: MediaQuery.of(context).size.width,
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const MyHomePage()),
+                );
+              },
+              child: const Text("Bosh sahifa"),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -3193,7 +3620,7 @@ class _VideoPlayerViewState extends State<VideoPlayerView> {
           aspectRatio: 16 / 9,
           child: _chewieController != null
               ? Chewie(controller: _chewieController)
-              : CircularProgressIndicator(),
+              : const CircularProgressIndicator(),
         ),
       ],
     );
@@ -3208,6 +3635,13 @@ class VideoPlayersScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(title: const Text('Video Players')),
       body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
         child: ListView(
           padding: const EdgeInsets.all(20),
           children: const [
@@ -3291,6 +3725,13 @@ class _PDFapp extends State<PDFapp> {
   String pathPDF = "";
   String pathPDF2 = "";
   String pathPDF3 = "";
+  String pathPDF4 = "";
+  String pathPDF5 = "";
+  String pathPDF6 = "";
+  String pathPDF7 = "";
+  String pathPDF8 = "";
+  String pathPDF9 = "";
+  String pathPDF10 = "";
 
   @override
   void initState() {
@@ -3305,9 +3746,44 @@ class _PDFapp extends State<PDFapp> {
         pathPDF2 = f.path;
       });
     });
-    fromAsset('assets/PPTLectuer/TAQDIMOT1.pdf', 'TAQDIMOT1.pdf').then((f) {
+    fromAsset('assets/PPTLectuer/3-TAQDIMOT.pdf', '3-TAQDIMOT.pdf').then((f) {
       setState(() {
         pathPDF3 = f.path;
+      });
+    });
+    fromAsset('assets/PPTLectuer/4-TAQDIMOT.pdf', '4-TAQDIMOT.pdf').then((f) {
+      setState(() {
+        pathPDF4 = f.path;
+      });
+    });
+    fromAsset('assets/PPTLectuer/5-TAQDIMOT.pdf', '5-TAQDIMOT.pdf').then((f) {
+      setState(() {
+        pathPDF5 = f.path;
+      });
+    });
+    fromAsset('assets/PPTLectuer/6-TAQDIMOT.pdf', '6-TAQDIMOT.pdf').then((f) {
+      setState(() {
+        pathPDF6 = f.path;
+      });
+    });
+    fromAsset('assets/PPTLectuer/7-TAQDIMOT.pdf', '7-TAQDIMOT.pdf').then((f) {
+      setState(() {
+        pathPDF7 = f.path;
+      });
+    });
+    fromAsset('assets/PPTLectuer/8-TAQDIMOT.pdf', '8-TAQDIMOT.pdf').then((f) {
+      setState(() {
+        pathPDF8 = f.path;
+      });
+    });
+    fromAsset('assets/PPTLectuer/9-TAQDIMOT.pdf', '9-TAQDIMOT.pdf').then((f) {
+      setState(() {
+        pathPDF9 = f.path;
+      });
+    });
+    fromAsset('assets/PPTLectuer/10-TAQDIMOT.pdf', '10-TAQDIMOT.pdf').then((f) {
+      setState(() {
+        pathPDF10 = f.path;
       });
     });
   }
@@ -3330,8 +3806,10 @@ class _PDFapp extends State<PDFapp> {
 
   @override
   Widget build(BuildContext context) {
-    final themeData = Theme.of(context);
     return Scaffold(
+      appBar: AppBar(
+        title: const Text("Ma'ruzalar yuzasidan taqdimotlar"),
+      ),
       body: Builder(
         builder: (BuildContext context) {
           return ListView(
@@ -3339,35 +3817,34 @@ class _PDFapp extends State<PDFapp> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  ElevatedButton(
-                    child: Text('Tap to Open Document',
-                        style: themeData.textTheme.headline4
-                            ?.copyWith(fontSize: 21.0)),
-                    onPressed: () {
-                      if (pathPDF.isNotEmpty) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PDFScreen(path: pathPDF),
-                          ),
-                        );
-                      }
-                    },
-                  ),
-                  ElevatedButton(
-                    child: Text('Tap to Open Document',
-                        style: themeData.textTheme.headline4
-                            ?.copyWith(fontSize: 21.0)),
-                    onPressed: () {
-                      if (pathPDF.isNotEmpty) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PDFScreen(path: pathPDF2),
-                          ),
-                        );
-                      }
-                    },
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Parazitologiya fanining predmeti, tarkibi va vazifalari",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (pathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: pathPDF),
+                            ),
+                          );
+                        }
+                      },
+                    ),
                   ),
                   const Padding(padding: EdgeInsets.only(top: 10.0)),
                   Container(
@@ -3378,7 +3855,7 @@ class _PDFapp extends State<PDFapp> {
                         Icons.chrome_reader_mode,
                         size: 50,
                       ),
-                      title: Text(
+                      title: const Text(
                         "Tirik organizmlarning o’zaro munosabatlari va uning asosiy shakllari",
                         textAlign: TextAlign.justify,
                         style: TextStyle(
@@ -3391,7 +3868,745 @@ class _PDFapp extends State<PDFapp> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: pathPDF2),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Parazit va xo’jayin orasidagi bog’lanishning turli-tuman shakllari",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (pathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
                               builder: (context) => PDFScreen(path: pathPDF3),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Doimiy (stasionar) parazitizm",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (pathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: pathPDF4),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Parazitlarning xo’jayinlari",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (pathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: pathPDF5),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Parazitlarning xo’jayin tanasiga kirishi va undan chiqish yo’llari",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (pathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: pathPDF6),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Parazit va xo’jayin orasidagi munosabatlar",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (pathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: pathPDF7),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Xo’jayinning parazitga ta’siri. Tashqi muhit omillarining parazit va xo’jayinga ta’siri",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (pathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: pathPDF8),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Parazitlarning tuzilishi va hayot siklidagi adaptasiyalar",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (pathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: pathPDF9),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Infeksion va invazion kasalliklar. Transmissiv kasalliklar",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (pathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: pathPDF10),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}
+
+class PDFlabapp extends StatefulWidget {
+  @override
+  _PDFlabapp createState() => _PDFlabapp();
+}
+
+class _PDFlabapp extends State<PDFlabapp> {
+  String lpathPDF = "";
+  String lpathPDF2 = "";
+  String lpathPDF3 = "";
+  String lpathPDF4 = "";
+  String lpathPDF5 = "";
+  String lpathPDF6 = "";
+  String lpathPDF7 = "";
+  String lpathPDF8 = "";
+  String lpathPDF9 = "";
+  String lpathPDF10 = "";
+  String lpathPDF12 = "";
+  String lpathPDF13 = "";
+  String lpathPDF14 = "";
+
+  @override
+  void initState() {
+    super.initState();
+    fromAssets('assets/PPTLab/Labt1.pdf', 'labt1.pdf').then((f) {
+      setState(() {
+        lpathPDF = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt2.pdf', 'labt2.pdf').then((f) {
+      setState(() {
+        lpathPDF2 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt3.pdf', 'labt3.pdf').then((f) {
+      setState(() {
+        lpathPDF3 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt4.pdf', 'labt4.pdf').then((f) {
+      setState(() {
+        lpathPDF4 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt5.pdf', 'labt5.pdf').then((f) {
+      setState(() {
+        lpathPDF5 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt6.pdf', 'labt6.pdf').then((f) {
+      setState(() {
+        lpathPDF6 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt7.pdf', 'labt7.pdf').then((f) {
+      setState(() {
+        lpathPDF7 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt8.pdf', 'labt8.pdf').then((f) {
+      setState(() {
+        lpathPDF8 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt9.pdf', 'labt9.pdf').then((f) {
+      setState(() {
+        lpathPDF9 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt10.pdf', 'labt10.pdf').then((f) {
+      setState(() {
+        lpathPDF10 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt12.pdf', 'labt12.pdf').then((f) {
+      setState(() {
+        lpathPDF12 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt13.pdf', 'labt13.pdf').then((f) {
+      setState(() {
+        lpathPDF13 = f.path;
+      });
+    });
+    fromAssets('assets/PPTLab/Labt14.pdf', 'labt14.pdf').then((f) {
+      setState(() {
+        lpathPDF14 = f.path;
+      });
+    });
+  }
+
+  Future<File> fromAssets(String asset, String filename) async {
+    Completer<File> completer = Completer();
+    try {
+      var dir = await getApplicationDocumentsDirectory();
+      File file = File("${dir.path}/$filename");
+      var data = await rootBundle.load(asset);
+      var bytes = data.buffer.asUint8List();
+      await file.writeAsBytes(bytes, flush: true);
+      completer.complete(file);
+    } catch (e) {
+      throw Exception('Error parsing asset file! $e');
+    }
+
+    return completer.future;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text("Laboratoriyalar yuzasidan taqdimotlar"),
+      ),
+      body: Builder(
+        builder: (BuildContext context) {
+          return ListView(
+            children: [
+              Column(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Protozooz kasalliklar. Ichburug’ amyobasi. Tuzilishi va hayot sikli",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Tripanosomalar va leyshmaniyalar. Tuzilish xususiyatlari",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF2),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Qon sporalilari - Haemosporidia. Bezgak parazitlari",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF3),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Chorva hayvonlarini ovqat hazm qilish sistemasida yashovchi parazitlarni aniqlash usullari",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF4),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Nashtarsimon (lansetsimon) va mushuk (sibir) so’rg’ichlilari",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF5),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Qoramol va cho’chqa solityorlarining tuzilish xususiyatlari va hayot sikllari",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF6),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Keng tasma,  kalta (pakana) zanjir va exinokokklarning tuzilishi",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF7),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Odamning parazit nematodalari. Tuzilishi va hayot sikli",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF8),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Odamning parazit nematodalari. Ostrisa, qilbosh nematoda, trixina. Zarari va profilaktikasi",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF9),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "O’simliklarning turli vegetativ a’zolarida va rizosfera tuprog’ida yashovchi fitonematodalar",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF10),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "O’simliklarning parazit nematodalari. Ildiz bo’rtma nematodalari",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF12),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Ektoparazit bo’g’imoyoqlilar. Iksod va mol kanasi",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF13),
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
+                  Container(
+                    height: MediaQuery.of(context).size.height * 0.12,
+                    color: Colors.blueGrey,
+                    child: ListTile(
+                      leading: const Icon(
+                        Icons.chrome_reader_mode,
+                        size: 50,
+                      ),
+                      title: const Text(
+                        "Qon so’ruvchi hasharotlar. Ko’payishi va rivojlanishi. Ularning kasalliklarni tarqatishdagi roli",
+                        textAlign: TextAlign.justify,
+                        style: TextStyle(
+                          fontSize: 18,
+                          textBaseline: TextBaseline.ideographic,
+                        ),
+                      ),
+                      onTap: () {
+                        if (lpathPDF.isNotEmpty) {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => PDFScreen(path: lpathPDF14),
                             ),
                           );
                         }
