@@ -1,8 +1,9 @@
-# untitled1
+# Parazitology
 
 A new Flutter project.
 
 ## Getting Started
+This project is created by Narzullaev Kholbek.
 
 This project is a starting point for a Flutter application.
 
