@@ -424,195 +424,187 @@ class MyHomePage extends StatelessWidget {
             fit: BoxFit.fill,
           ),
         ),
-        child: ListView(
+        child: Column(
           children: [
-            Column(
+            const Padding(padding: EdgeInsets.only(top: 10.0)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                Column(
-                  children: [
-                    const Padding(padding: EdgeInsets.only(top: 10.0)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                Container(
+                  padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                  height: MediaQuery.of(context).size.height *
+                      containerHeightFraction *
+                      1.2,
+                  width: MediaQuery.of(context).size.width *
+                      containerWidthFraction,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/7151.jpeg'),
+                      fit: BoxFit.fill,
+                      // opacity: 0.8,
+                    ),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Lectures()),
+                      );
+                    },
+                    child: TextSectiontwo('Maruzalar', ''),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                  height: MediaQuery.of(context).size.height *
+                      containerHeightFraction *
+                      1.2,
+                  width: MediaQuery.of(context).size.width *
+                      containerWidthFraction,
+                  decoration: const BoxDecoration(
+                    color: Color(0x69027ee5),
+                    // border: Border.all(color: Colors.blue, width: 1),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/presentation.jpeg'),
+                        fit: BoxFit.fill),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Presents()),
+                      );
+                    },
+                    child: TextSectiontwo('Taqdimot', ''),
+                  ),
+                )
+              ],
+            ),
+            const Padding(padding: EdgeInsets.only(top: 25.0)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                  height: MediaQuery.of(context).size.height *
+                      containerHeightFraction *
+                      1.2,
+                  width: MediaQuery.of(context).size.width *
+                      containerWidthFraction,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/labs.jpeg'),
+                      fit: BoxFit.fill,
+                      // opacity: 0.8,
+                    ),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Laboratory()),
+                      );
+                    },
+                    child: Column(
                       children: [
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
-                          height: MediaQuery.of(context).size.height *
-                              containerHeightFraction *
-                              1.2,
-                          width: MediaQuery.of(context).size.width *
-                              containerWidthFraction,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/7151.jpg'),
-                              fit: BoxFit.fill,
-                              // opacity: 0.8,
-                            ),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Lectures()),
-                              );
-                            },
-                            child: TextSectiontwo('Maruzalar', ''),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
-                          height: MediaQuery.of(context).size.height *
-                              containerHeightFraction *
-                              1.2,
-                          width: MediaQuery.of(context).size.width *
-                              containerWidthFraction,
-                          decoration: const BoxDecoration(
-                            color: Color(0x69027ee5),
-                            // border: Border.all(color: Colors.blue, width: 1),
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            image: DecorationImage(
-                                image: AssetImage('assets/images/presentation.jpg'),
-                                fit: BoxFit.fill),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Presents()),
-                              );
-                            },
-                            child: TextSectiontwo('Taqdimot', ''),
-                          ),
-                        )
+                        TextSectiontwo('Laboratoriya', ''),
                       ],
                     ),
-                    const Padding(padding: EdgeInsets.only(top: 25.0)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
-                          height: MediaQuery.of(context).size.height *
-                              containerHeightFraction *
-                              1.2,
-                          width: MediaQuery.of(context).size.width *
-                              containerWidthFraction,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/labs.jpg'),
-                              fit: BoxFit.fill,
-                              // opacity: 0.8,
-                            ),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Laboratory()),
-                              );
-                            },
-                            child: Column(
-                              children: [
-                                TextSectiontwo('Laboratoriya', ''),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
-                          height: MediaQuery.of(context).size.height *
-                              containerHeightFraction *
-                              1.2,
-                          width: MediaQuery.of(context).size.width *
-                              containerWidthFraction,
-                          decoration: const BoxDecoration(
-                            color: Color(0x69027ee5),
-                            // border: Border.all(color: Colors.blue, width: 1),
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            image: DecorationImage(
-                                image: AssetImage('assets/images/glossary.jpg'),
-                                fit: BoxFit.fill),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => const Glossariy()),
-                              );
-                            },
-                            child: TextSectiontwo('Glossariy', ''),
-                          ),
-                        )
-                      ],
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                  height: MediaQuery.of(context).size.height *
+                      containerHeightFraction *
+                      1.2,
+                  width: MediaQuery.of(context).size.width *
+                      containerWidthFraction,
+                  decoration: const BoxDecoration(
+                    color: Color(0x69027ee5),
+                    // border: Border.all(color: Colors.blue, width: 1),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/glossary.jpg'),
+                        fit: BoxFit.fill),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const Glossariy()),
+                      );
+                    },
+                    child: TextSectiontwo('Glossariy', ''),
+                  ),
+                )
+              ],
+            ),
+            const Padding(padding: EdgeInsets.only(top: 25.0)),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                  height: MediaQuery.of(context).size.height *
+                      containerHeightFraction *
+                      1.2,
+                  width: MediaQuery.of(context).size.width *
+                      containerWidthFraction,
+                  decoration: const BoxDecoration(
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    image: DecorationImage(
+                      image: AssetImage('assets/images/videol.jpeg'),
+                      fit: BoxFit.fill,
                     ),
-                    const Padding(padding: EdgeInsets.only(top: 25.0)),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
-                          height: MediaQuery.of(context).size.height *
-                              containerHeightFraction *
-                              1.2,
-                          width: MediaQuery.of(context).size.width *
-                              containerWidthFraction,
-                          decoration: const BoxDecoration(
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            image: DecorationImage(
-                              image: AssetImage('assets/images/videol.jpg'),
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const VideoPlayersScreen()),
-                              );
-                            },
-                            child: TextSectiontwo('Video darsliklar', ''),
-                          ),
-                        ),
-                        Container(
-                          padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
-                          height: MediaQuery.of(context).size.height *
-                              containerHeightFraction *
-                              1.2,
-                          width: MediaQuery.of(context).size.width *
-                              containerWidthFraction,
-                          decoration: const BoxDecoration(
-                            color: Color(0x69027ee5),
-                            // border: Border.all(color: Colors.blue, width: 1),
-                            borderRadius: BorderRadius.all(Radius.circular(5)),
-                            image: DecorationImage(
-                                image: AssetImage('assets/images/quiz.jpg'),
-                                fit: BoxFit.fill),
-                          ),
-                          child: TextButton(
-                            onPressed: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => Quiz(
-                                    initialIndex: 0,
-                                    initialScore: 0,
-                                  ),
-                                ),
-                              );
-                            },
-                            child: TextSectiontwo('Test savollari', ''),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) =>
+                                const VideoPlayersScreen()),
+                      );
+                    },
+                    child: TextSectiontwo('Video darsliklar', ''),
+                  ),
+                ),
+                Container(
+                  padding: const EdgeInsets.fromLTRB(3, 5, 0, 0),
+                  height: MediaQuery.of(context).size.height *
+                      containerHeightFraction *
+                      1.2,
+                  width: MediaQuery.of(context).size.width *
+                      containerWidthFraction,
+                  decoration: const BoxDecoration(
+                    color: Color(0x69027ee5),
+                    // border: Border.all(color: Colors.blue, width: 1),
+                    borderRadius: BorderRadius.all(Radius.circular(5)),
+                    image: DecorationImage(
+                        image: AssetImage('assets/images/quiz.jpg'),
+                        fit: BoxFit.fill),
+                  ),
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => Quiz(
+                            initialIndex: 0,
+                            initialScore: 0,
                           ),
                         ),
-                      ],
-                    ),
-                  ],
+                      );
+                    },
+                    child: TextSectiontwo('Test savollari', ''),
+                  ),
                 ),
               ],
             ),
