@@ -446,7 +446,7 @@ class MyHomePage extends StatelessWidget {
                             image: DecorationImage(
                               image: AssetImage('assets/images/7151.jpg'),
                               fit: BoxFit.fill,
-                              opacity: 0.8,
+                              // opacity: 0.8,
                             ),
                           ),
                           child: TextButton(
@@ -504,7 +504,7 @@ class MyHomePage extends StatelessWidget {
                             image: DecorationImage(
                               image: AssetImage('assets/images/labs.jpg'),
                               fit: BoxFit.fill,
-                              opacity: 0.8,
+                              // opacity: 0.8,
                             ),
                           ),
                           child: TextButton(
@@ -566,7 +566,6 @@ class MyHomePage extends StatelessWidget {
                             image: DecorationImage(
                               image: AssetImage('assets/images/videol.jpg'),
                               fit: BoxFit.fill,
-                              opacity: 0.8,
                             ),
                           ),
                           child: TextButton(
@@ -1910,7 +1909,7 @@ class _Profilepage extends State<Profilepage> {
                             ),
                           ),
                         ),
-                        const Padding(padding: EdgeInsets.only(left: 25)),
+                        // const Padding(padding: EdgeInsets.only(left: 25)),
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -1933,6 +1932,7 @@ class _Profilepage extends State<Profilepage> {
                           ),
                         ),
                         Container(
+                          width: MediaQuery.of(context).size.width * 0.07,
                           height: 50,
                           decoration: BoxDecoration(color: Colors.transparent),
                           alignment: Alignment.centerLeft,
@@ -1948,6 +1948,7 @@ class _Profilepage extends State<Profilepage> {
                           ),
                         ),
                         Container(
+                          width: MediaQuery.of(context).size.width * 0.01,
                           height: 50,
                           decoration: BoxDecoration(color: Colors.transparent),
                           alignment: Alignment.centerLeft,
