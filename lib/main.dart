@@ -402,7 +402,7 @@ class MyHomePage extends StatelessWidget {
                     Icons.person_2_outlined,
                   ),
                   applicationName: 'Parazitologiya',
-                  applicationVersion: '1.0.25',
+                  applicationVersion: '1.0.1',
                   applicationLegalese: '©hbn_company',
                   aboutBoxChildren: [
                     Image(
