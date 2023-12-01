@@ -315,6 +315,7 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    int selectedPageIndex = 0;
     final authProvider = Provider.of<AuthProvider>(context);
     return Scaffold(
       appBar: AppBar(
@@ -443,7 +444,7 @@ class MyHomePage extends StatelessWidget {
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             image: DecorationImage(
-                              image: AssetImage('assets/images/Lectures.jpg'),
+                              image: AssetImage('assets/images/7151.jpg'),
                               fit: BoxFit.fill,
                               opacity: 0.8,
                             ),
@@ -471,7 +472,7 @@ class MyHomePage extends StatelessWidget {
                             // border: Border.all(color: Colors.blue, width: 1),
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             image: DecorationImage(
-                                image: AssetImage('assets/images/present.png'),
+                                image: AssetImage('assets/images/presentation.jpg'),
                                 fit: BoxFit.fill),
                           ),
                           child: TextButton(
@@ -501,7 +502,7 @@ class MyHomePage extends StatelessWidget {
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             image: DecorationImage(
-                              image: AssetImage('assets/images/lab.jpg'),
+                              image: AssetImage('assets/images/labs.jpg'),
                               fit: BoxFit.fill,
                               opacity: 0.8,
                             ),
@@ -533,7 +534,7 @@ class MyHomePage extends StatelessWidget {
                             // border: Border.all(color: Colors.blue, width: 1),
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             image: DecorationImage(
-                                image: AssetImage('assets/images/glos.jpg'),
+                                image: AssetImage('assets/images/glossary.jpg'),
                                 fit: BoxFit.fill),
                           ),
                           child: TextButton(
@@ -563,7 +564,7 @@ class MyHomePage extends StatelessWidget {
                           decoration: const BoxDecoration(
                             borderRadius: BorderRadius.all(Radius.circular(5)),
                             image: DecorationImage(
-                              image: AssetImage('assets/images/video.jpeg'),
+                              image: AssetImage('assets/images/videol.jpg'),
                               fit: BoxFit.fill,
                               opacity: 0.8,
                             ),
@@ -737,9 +738,12 @@ class Succes extends StatelessWidget {
           ),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Padding(padding: EdgeInsets.only(right: 3)),
+            const Padding(padding: EdgeInsets.only(right: 0)),
             Container(
+              // height: MediaQuery.of(context).size.height * 0.1,
+              width: MediaQuery.of(context).size.width * 1,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -759,7 +763,7 @@ class Succes extends StatelessWidget {
                   const Padding(padding: EdgeInsets.only(top: 10)),
                   Container(
                     height: MediaQuery.of(context).size.height * 0.1,
-                    width: MediaQuery.of(context).size.width * 0.98,
+                    width: MediaQuery.of(context).size.width * 0.95,
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
@@ -773,7 +777,7 @@ class Succes extends StatelessWidget {
                     ),
                     child: Row(
                       children: [
-                        const Padding(padding: EdgeInsets.only(left: 10)),
+                        const Padding(padding: EdgeInsets.only(left: 5)),
                         Container(
                           height: MediaQuery.of(context).size.height * 0.1,
                           // width: MediaQuery.of(context).size.width * 0.6,
@@ -796,7 +800,7 @@ class Succes extends StatelessWidget {
                             ),
                           ),
                         ),
-                        const Padding(padding: EdgeInsets.only(left: 30)),
+                        // const Padding(padding: EdgeInsets.only(left: 20)),
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -850,7 +854,7 @@ class Succes extends StatelessWidget {
                               );
                             },
                             icon: const Icon(
-                              Icons.directions_walk_outlined,
+                              Icons.arrow_circle_right_outlined,
                               color: Colors.black45,
                             ),
                           ),
@@ -861,7 +865,7 @@ class Succes extends StatelessWidget {
                   const Padding(padding: EdgeInsets.only(top: 10.0)),
                   Container(
                     height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width * 0.98,
+                    width: MediaQuery.of(context).size.width * 0.95,
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
@@ -932,7 +936,7 @@ class Succes extends StatelessWidget {
                               children: [
                                 Container(
                                     width:
-                                    MediaQuery.of(context).size.width * 0.49,
+                                    MediaQuery.of(context).size.width * 0.45,
                                     child: Text(
                                       'Umumiy natija:',
                                       style: TextStyle(
@@ -967,7 +971,9 @@ class Succes extends StatelessWidget {
                     ),
                   ),
                   const Padding(padding: EdgeInsets.only(top: 15.0)),
+                  const Padding(padding: EdgeInsets.only(left: 10.0)),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
                         height: MediaQuery.of(context).size.height * 0.05,
@@ -1827,6 +1833,7 @@ class _Profilepage extends State<Profilepage> {
             ),
             const Padding(padding: EdgeInsets.only(top: 10)),
             Container(
+              width: MediaQuery.of(context).size.width * 0.95,
               decoration: BoxDecoration(
                 boxShadow: [
                   BoxShadow(
@@ -1836,18 +1843,38 @@ class _Profilepage extends State<Profilepage> {
                 ],
                 shape: BoxShape.rectangle,
                 borderRadius: BorderRadius.circular(10),
-                color: Color(0xffefeeee),
+                color: Colors.white54,
               ),
               child: Column(
                 children: [
                   Container(
-                    child: Text("Test natijalari", style: TextStyle(color: Colors.blue, fontSize: 25),),
+                    child: Text("Test natijalari", style: TextStyle(
+                      color: Colors.cyanAccent,
+                      fontSize: 30,
+                      shadows: [
+                        Shadow(
+                          color: Color(
+                              0xff949393), // Choose the color of the shadow
+                          blurRadius:
+                          2.0, // Adjust the blur radius for the shadow effect
+                          offset: Offset(1.5,
+                              1.5), // Set the horizontal and vertical offset for the shadow
+                        ),
+                      ],),),
                   ),
                   const Padding(padding: EdgeInsets.only(top: 10)),
                   Container(
                     height: MediaQuery.of(context).size.height * 0.1,
-                    width: MediaQuery.of(context).size.width * 0.98,
+                    width: MediaQuery.of(context).size.width * 0.95,
                     decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.topRight,
+                          end: Alignment.bottomLeft,
+                          colors: [
+                            Colors.white,
+                            Colors.tealAccent,
+                          ],
+                        ),
                       boxShadow: [
                         BoxShadow(
                             color: Colors.grey.shade900,
@@ -1860,7 +1887,7 @@ class _Profilepage extends State<Profilepage> {
                     ),
                     child: Row(
                       children: [
-                        const Padding(padding: EdgeInsets.only(left: 10)),
+                        const Padding(padding: EdgeInsets.only(left: 6)),
                         Container(
                           height: MediaQuery.of(context).size.height * 0.1,
                           // width: MediaQuery.of(context).size.width * 0.6,
@@ -1883,7 +1910,7 @@ class _Profilepage extends State<Profilepage> {
                             ),
                           ),
                         ),
-                        const Padding(padding: EdgeInsets.only(left: 30)),
+                        const Padding(padding: EdgeInsets.only(left: 25)),
                         Container(
                           alignment: Alignment.centerLeft,
                           child: Text(
@@ -1937,8 +1964,8 @@ class _Profilepage extends State<Profilepage> {
                               );
                             },
                             icon: const Icon(
-                              Icons.directions_walk_outlined,
-                              color: Colors.black45,
+                              Icons.arrow_circle_right_outlined,
+                              color: Colors.blue,
                             ),
                           ),
                         ),
@@ -1948,7 +1975,7 @@ class _Profilepage extends State<Profilepage> {
                   const Padding(padding: EdgeInsets.only(top: 10.0)),
                   Container(
                     height: MediaQuery.of(context).size.height * 0.15,
-                    width: MediaQuery.of(context).size.width * 0.98,
+                    width: MediaQuery.of(context).size.width * 0.95,
                     decoration: BoxDecoration(
                       boxShadow: [
                         BoxShadow(
@@ -2019,9 +2046,9 @@ class _Profilepage extends State<Profilepage> {
                               children: [
                                 Container(
                                     width:
-                                        MediaQuery.of(context).size.width * 0.49,
+                                        MediaQuery.of(context).size.width * 0.45,
                                     child: Text(
-                                      'Umumiy natija:',
+                                      'Umumiy ball:',
                                       style: TextStyle(
                                           color: Colors.blue, fontSize: 18),
                                       textAlign: TextAlign.center,
@@ -2053,6 +2080,7 @@ class _Profilepage extends State<Profilepage> {
                       ],
                     ),
                   ),
+                  const Padding(padding: EdgeInsets.only(top: 10.0)),
                 ],
               ),
             ),
@@ -3451,8 +3479,8 @@ class _RegistrationPageState extends State<RegistrationPage> {
             children: [
               Container(
                 height: 150,
-                child: Image.network(
-                    'https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png'),
+                child: Image.asset(
+                    'assets/images/logo-no-background.png'),
               ),
               TextFormField(
                 controller: usernameController,
@@ -3622,9 +3650,10 @@ class _LoginPage extends State<LoginPage> {
                   height: MediaQuery.of(context).size.height *
                       containerHeightFraction *
                       1.2,
-                  child: Image.network(
-                      'https://hbnnarzullayev.pythonanywhere.com/static/logo-no-background.png'),
+                  child: Image.asset(
+                      'assets/images/logo-no-background.png'),
                 ),
+                const Padding(padding: EdgeInsets.only(top: 9.0)),
                 const Padding(padding: EdgeInsets.only(left: 9.0)),
                 TextFormField(
                   controller: usernameController,
@@ -3637,6 +3666,7 @@ class _LoginPage extends State<LoginPage> {
                       const InputDecoration(labelText: "Maxfiy so'z (Parol)"),
                   obscureText: true,
                 ),
+                const Padding(padding: EdgeInsets.only(top: 9.0)),
                 Row(
                   children: [
                     Container(
