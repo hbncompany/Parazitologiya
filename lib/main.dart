@@ -1,6 +1,7 @@
 // import 'dart:js';
 
 // ignore_for_file: use_build_context_synchronously
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -20,9 +21,10 @@ import 'circle.dart';
 import 'dart:async';
 // import 'package:flutter_html/flutter_html.dart';
 // import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
+import 'package:image_picker/image_picker.dart';
+
 // import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 // import 'package:flutter_full_pdf_viewer/flutter_full_pdf_viewer.dart';
 // import 'package:shared_preferences/shared_preferences.dart';
@@ -440,7 +442,7 @@ class MyHomePage extends StatelessWidget {
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     image: DecorationImage(
-                      image: AssetImage('assets/images/7151.jpeg'),
+                      image: AssetImage('assets/images/Lecture.png'),
                       fit: BoxFit.fill,
                       // opacity: 0.8,
                     ),
@@ -468,7 +470,7 @@ class MyHomePage extends StatelessWidget {
                     // border: Border.all(color: Colors.blue, width: 1),
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     image: DecorationImage(
-                        image: AssetImage('assets/images/presentation.jpeg'),
+                        image: AssetImage('assets/images/presentation.jpg'),
                         fit: BoxFit.fill),
                   ),
                   child: TextButton(
@@ -498,7 +500,7 @@ class MyHomePage extends StatelessWidget {
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     image: DecorationImage(
-                      image: AssetImage('assets/images/labs.jpeg'),
+                      image: AssetImage('assets/images/labs.jpg'),
                       fit: BoxFit.fill,
                       // opacity: 0.8,
                     ),
@@ -530,7 +532,7 @@ class MyHomePage extends StatelessWidget {
                     // border: Border.all(color: Colors.blue, width: 1),
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     image: DecorationImage(
-                        image: AssetImage('assets/images/glossary.jpg'),
+                        image: AssetImage('assets/images/Glossary.png'),
                         fit: BoxFit.fill),
                   ),
                   child: TextButton(
@@ -560,7 +562,7 @@ class MyHomePage extends StatelessWidget {
                   decoration: const BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(5)),
                     image: DecorationImage(
-                      image: AssetImage('assets/images/videol.jpeg'),
+                      image: AssetImage('assets/images/videol.png'),
                       fit: BoxFit.fill,
                     ),
                   ),
@@ -569,8 +571,7 @@ class MyHomePage extends StatelessWidget {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) =>
-                                const VideoPlayersScreen()),
+                            builder: (context) => const VideoPlayersScreen()),
                       );
                     },
                     child: TextSectiontwo('Video darsliklar', ''),
@@ -749,7 +750,10 @@ class Succes extends StatelessWidget {
               child: Column(
                 children: [
                   Container(
-                    child: Text("Test natijalari", style: TextStyle(color: Colors.blue, fontSize: 25),),
+                    child: Text(
+                      "Test natijalari",
+                      style: TextStyle(color: Colors.blue, fontSize: 25),
+                    ),
                   ),
                   const Padding(padding: EdgeInsets.only(top: 10)),
                   Container(
@@ -763,7 +767,9 @@ class Succes extends StatelessWidget {
                             blurRadius: 15),
                       ],
                       shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.only (topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15)),
                       color: Color(0xffefeeee),
                     ),
                     child: Row(
@@ -783,7 +789,7 @@ class Succes extends StatelessWidget {
                                   color: Color(
                                       0xff070707), // Choose the color of the shadow
                                   blurRadius:
-                                  2.0, // Adjust the blur radius for the shadow effect
+                                      2.0, // Adjust the blur radius for the shadow effect
                                   offset: Offset(1.5,
                                       1.5), // Set the horizontal and vertical offset for the shadow
                                 ),
@@ -805,7 +811,7 @@ class Succes extends StatelessWidget {
                                   color: Color(
                                       0xff070707), // Choose the color of the shadow
                                   blurRadius:
-                                  2.0, // Adjust the blur radius for the shadow effect
+                                      2.0, // Adjust the blur radius for the shadow effect
                                   offset: Offset(1.5,
                                       1.5), // Set the horizontal and vertical offset for the shadow
                                 ),
@@ -880,7 +886,7 @@ class Succes extends StatelessWidget {
                                 color: Color(
                                     0xff070707), // Choose the color of the shadow
                                 blurRadius:
-                                2.0, // Adjust the blur radius for the shadow effect
+                                    2.0, // Adjust the blur radius for the shadow effect
                                 offset: Offset(1.5,
                                     1.5), // Set the horizontal and vertical offset for the shadow
                               ),
@@ -893,8 +899,8 @@ class Succes extends StatelessWidget {
                             Column(
                               children: [
                                 Container(
-                                    width:
-                                    MediaQuery.of(context).size.width * 0.49,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.49,
                                     child: Text(
                                       'Urinishlar soni:',
                                       style: TextStyle(
@@ -913,7 +919,7 @@ class Succes extends StatelessWidget {
                                           color: Color(
                                               0xff070707), // Choose the color of the shadow
                                           blurRadius:
-                                          2.0, // Adjust the blur radius for the shadow effect
+                                              2.0, // Adjust the blur radius for the shadow effect
                                           offset: Offset(1.5,
                                               1.5), // Set the horizontal and vertical offset for the shadow
                                         ),
@@ -926,8 +932,8 @@ class Succes extends StatelessWidget {
                             Column(
                               children: [
                                 Container(
-                                    width:
-                                    MediaQuery.of(context).size.width * 0.45,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
                                     child: Text(
                                       'Umumiy natija:',
                                       style: TextStyle(
@@ -946,7 +952,7 @@ class Succes extends StatelessWidget {
                                           color: Color(
                                               0xff070707), // Choose the color of the shadow
                                           blurRadius:
-                                          2.0, // Adjust the blur radius for the shadow effect
+                                              2.0, // Adjust the blur radius for the shadow effect
                                           offset: Offset(1.5,
                                               1.5), // Set the horizontal and vertical offset for the shadow
                                         ),
@@ -977,43 +983,54 @@ class Succes extends StatelessWidget {
                                 blurRadius: 15),
                           ],
                           shape: BoxShape.rectangle,
-                          borderRadius: BorderRadius.only (topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15)),
                           color: Color(0xffefeeee),
                         ),
-                        child: TextButton(onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) =>
-                                MyHomePage()),
-                          );}, child: Text("Bosh sahifa"),),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MyHomePage()),
+                            );
+                          },
+                          child: Text("Bosh sahifa"),
+                        ),
                       ),
                       const Padding(padding: EdgeInsets.only(left: 8.0)),
-                  Container(
-                    height: MediaQuery.of(context).size.height * 0.05,
-                    width: MediaQuery.of(context).size.width * 0.45,
-                    decoration: BoxDecoration(
-                      boxShadow: [
-                        BoxShadow(
-                            color: Colors.grey.shade900,
-                            spreadRadius: 5,
-                            blurRadius: 15),
-                      ],
-                      shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.only (topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
-                      color: Color(0xffefeeee),
-                    ),
-                    child: TextButton(onPressed: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Quiz(
-                            initialIndex: 0,
-                            initialScore: 0,
-                          ),
+                      Container(
+                        height: MediaQuery.of(context).size.height * 0.05,
+                        width: MediaQuery.of(context).size.width * 0.45,
+                        decoration: BoxDecoration(
+                          boxShadow: [
+                            BoxShadow(
+                                color: Colors.grey.shade900,
+                                spreadRadius: 5,
+                                blurRadius: 15),
+                          ],
+                          shape: BoxShape.rectangle,
+                          borderRadius: BorderRadius.only(
+                              topLeft: Radius.circular(15),
+                              bottomRight: Radius.circular(15)),
+                          color: Color(0xffefeeee),
                         ),
-                      );}, child: Text("Test"),),
-                  ),
+                        child: TextButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => Quiz(
+                                  initialIndex: 0,
+                                  initialScore: 0,
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text("Test"),
+                        ),
+                      ),
                     ],
                   ),
                 ],
@@ -1648,6 +1665,121 @@ void labp14(BuildContext context) {
   );
 }
 
+class Profilepages extends StatefulWidget {
+  const Profilepages({super.key});
+
+  @override
+  State<Profilepages> createState() => _Profilepages();
+}
+class _Profilepages extends State<Profilepages> {
+  File? _image;
+  int selectedPageIndex = 0;
+  void logoutUser() {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    authProvider.login(""); // Clear the username
+    authProvider.setLoggedInEmail("");
+    authProvider.setscore(0);
+    // You can also perform any additional logout actions here
+  }
+
+  Future<void> _uploadPhoto() async {
+    final authProvider = Provider.of<AuthProvider>(context, listen: false);
+    if (_image == null) {
+      // No image selected
+      return;
+    }
+
+    var request = http.MultipartRequest(
+      'POST',
+      Uri.parse('https://hbnnarzullayev.pythonanywhere.com/api/upload_img'),
+    )
+      ..fields['user_id'] = authProvider.username; // Replace with the actual user ID
+
+    // For web, convert the file to bytes and create an MultipartFile from bytes
+    List<int> imageBytes = await _image!.readAsBytes();
+    http.MultipartFile file = http.MultipartFile.fromBytes(
+      'photo',
+      Uint8List.fromList(imageBytes),
+      filename: 'user_photo.jpg',
+    );
+
+    request.files.add(file);
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        // Handle success
+        print('Photo uploaded successfully');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Muvaffaqqiyatli yangilandi!'),
+          ),
+        );
+      } else {
+        // Handle error
+        print('Failed to upload photo');
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Yuklanmadi'),
+          ),
+        );
+      }
+    } catch (error) {
+      // Handle network or server error
+      print('Error: $error');
+    }
+  }
+
+  Future<void> _pickImage() async {
+    final ImagePicker _picker = ImagePicker();
+    final XFile? image = await _picker.pickImage(source: ImageSource.gallery);
+
+    if (image != null) {
+      setState(() {
+        _image = File(image.path);
+      });
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Profile Photo Uploader'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _image != null
+                ? CircleAvatar(
+              radius: 80,
+              backgroundImage: FileImage(_image!),
+            )
+                : CircleAvatar(
+              radius: 80,
+              child: Icon(Icons.person, size: 80),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                await _pickImage();
+              },
+              child: Text('Rasm tanlash'),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                await _uploadPhoto();
+              },
+              child: Text('Rasmni yuklash'),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 class Profilepage extends StatefulWidget {
   const Profilepage({super.key});
 
@@ -1697,6 +1829,7 @@ Future<void> fetchScore(BuildContext context) async {
 }
 
 class _Profilepage extends State<Profilepage> {
+  File? _image;
   int selectedPageIndex = 0;
   void logoutUser() {
     final authProvider = Provider.of<AuthProvider>(context, listen: false);
@@ -1737,28 +1870,28 @@ class _Profilepage extends State<Profilepage> {
         ),
         child: ListView(
           padding: EdgeInsets.zero,
-          children: [UserAccountsDrawerHeader(
-                decoration: const BoxDecoration(
-                  color: Colors.black38,
-                ),
-                accountName: Text(
-                  authProvider.username,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                accountEmail: Text(
-                  authProvider.email,
-                  style: const TextStyle(
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                currentAccountPicture:
-                    Container(
-                      child: Image.network(
-                          'https://hbnnarzullayev.pythonanywhere.com/static/Image/${authProvider.username}.jpg'),
-                    ),
+          children: [
+            UserAccountsDrawerHeader(
+              decoration: const BoxDecoration(
+                color: Colors.black38,
               ),
+              accountName: Text(
+                authProvider.username,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              accountEmail: Text(
+                authProvider.email,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              currentAccountPicture: Container(
+                child: Image.network(
+                    'https://hbnnarzullayev.pythonanywhere.com/static/Image/${authProvider.username}.jpg'),
+              ),
+            ),
             Container(
               decoration: BoxDecoration(color: Colors.black38),
               child: ListTile(
@@ -1785,6 +1918,21 @@ class _Profilepage extends State<Profilepage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(builder: (context) => const LoginPage()),
+                  );
+                },
+              ),
+            ),
+            Container(
+              decoration: BoxDecoration(color: Colors.black38),
+              child: ListTile(
+                leading: const Icon(
+                  Icons.login,
+                ),
+                title: Text("Profil rasmini o'zgartirish"),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const Profilepages()),
                   );
                 },
               ),
@@ -1839,33 +1987,37 @@ class _Profilepage extends State<Profilepage> {
               child: Column(
                 children: [
                   Container(
-                    child: Text("Test natijalari", style: TextStyle(
-                      color: Colors.cyanAccent,
-                      fontSize: 30,
-                      shadows: [
-                        Shadow(
-                          color: Color(
-                              0xff949393), // Choose the color of the shadow
-                          blurRadius:
-                          2.0, // Adjust the blur radius for the shadow effect
-                          offset: Offset(1.5,
-                              1.5), // Set the horizontal and vertical offset for the shadow
-                        ),
-                      ],),),
+                    child: Text(
+                      "Test natijalari",
+                      style: TextStyle(
+                        color: Colors.cyanAccent,
+                        fontSize: 30,
+                        shadows: [
+                          Shadow(
+                            color: Color(
+                                0xff949393), // Choose the color of the shadow
+                            blurRadius:
+                                2.0, // Adjust the blur radius for the shadow effect
+                            offset: Offset(1.5,
+                                1.5), // Set the horizontal and vertical offset for the shadow
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
                   const Padding(padding: EdgeInsets.only(top: 10)),
                   Container(
                     height: MediaQuery.of(context).size.height * 0.1,
                     width: MediaQuery.of(context).size.width * 0.95,
                     decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          begin: Alignment.topRight,
-                          end: Alignment.bottomLeft,
-                          colors: [
-                            Colors.white,
-                            Colors.tealAccent,
-                          ],
-                        ),
+                      gradient: LinearGradient(
+                        begin: Alignment.topRight,
+                        end: Alignment.bottomLeft,
+                        colors: [
+                          Colors.white,
+                          Colors.tealAccent,
+                        ],
+                      ),
                       boxShadow: [
                         BoxShadow(
                             color: Colors.grey.shade900,
@@ -1873,7 +2025,9 @@ class _Profilepage extends State<Profilepage> {
                             blurRadius: 15),
                       ],
                       shape: BoxShape.rectangle,
-                      borderRadius: BorderRadius.only (topLeft: Radius.circular(15), bottomRight: Radius.circular(15)),
+                      borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          bottomRight: Radius.circular(15)),
                       color: Color(0xffefeeee),
                     ),
                     child: Row(
@@ -1992,7 +2146,7 @@ class _Profilepage extends State<Profilepage> {
                                 color: Color(
                                     0xff070707), // Choose the color of the shadow
                                 blurRadius:
-                                2.0, // Adjust the blur radius for the shadow effect
+                                    2.0, // Adjust the blur radius for the shadow effect
                                 offset: Offset(1.5,
                                     1.5), // Set the horizontal and vertical offset for the shadow
                               ),
@@ -2005,8 +2159,8 @@ class _Profilepage extends State<Profilepage> {
                             Column(
                               children: [
                                 Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.49,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.49,
                                     child: Text(
                                       'Urinishlar soni:',
                                       style: TextStyle(
@@ -2038,8 +2192,8 @@ class _Profilepage extends State<Profilepage> {
                             Column(
                               children: [
                                 Container(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.45,
+                                    width: MediaQuery.of(context).size.width *
+                                        0.45,
                                     child: Text(
                                       'Umumiy ball:',
                                       style: TextStyle(
@@ -3472,12 +3626,12 @@ class _RegistrationPageState extends State<RegistrationPage> {
             children: [
               Container(
                 height: 150,
-                child: Image.asset(
-                    'assets/images/logo-no-background.png'),
+                child: Image.asset('assets/images/logo-no-background.png'),
               ),
               TextFormField(
                 controller: usernameController,
-                decoration: const InputDecoration(labelText: 'Foydalanuvchi nomi'),
+                decoration:
+                    const InputDecoration(labelText: 'Foydalanuvchi nomi'),
               ),
               TextFormField(
                 controller: emailController,
@@ -3485,12 +3639,14 @@ class _RegistrationPageState extends State<RegistrationPage> {
               ),
               TextFormField(
                 controller: pwdController,
-                decoration: const InputDecoration(labelText: "Maxfiy so'z (Parol)"),
+                decoration:
+                    const InputDecoration(labelText: "Maxfiy so'z (Parol)"),
                 obscureText: true,
               ),
               TextFormField(
                 controller: pwdcController,
-                decoration: const InputDecoration(labelText: "Maxfiy so'zni takrorlang"),
+                decoration: const InputDecoration(
+                    labelText: "Maxfiy so'zni takrorlang"),
                 obscureText: true,
               ),
               ElevatedButton(
@@ -3643,8 +3799,7 @@ class _LoginPage extends State<LoginPage> {
                   height: MediaQuery.of(context).size.height *
                       containerHeightFraction *
                       1.2,
-                  child: Image.asset(
-                      'assets/images/logo-no-background.png'),
+                  child: Image.asset('assets/images/logo-no-background.png'),
                 ),
                 const Padding(padding: EdgeInsets.only(top: 9.0)),
                 const Padding(padding: EdgeInsets.only(left: 9.0)),
@@ -3700,25 +3855,25 @@ class _LoginPage extends State<LoginPage> {
                     ),
                   ],
                 ),
-                    const Padding(padding: EdgeInsets.only(top: 5.0)),
-                    Container(
-                      height: MediaQuery.of(context).size.height *
-                          containerHeightFraction *
-                          0.25,
-                      width: MediaQuery.of(context).size.width *
-                          containerWidthFraction *
-                          0.7,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => const MyHomePage()),
-                          );
-                        },
-                        child: const Text("Bosh sahifa"),
-                      ),
-                    ),
+                const Padding(padding: EdgeInsets.only(top: 5.0)),
+                Container(
+                  height: MediaQuery.of(context).size.height *
+                      containerHeightFraction *
+                      0.25,
+                  width: MediaQuery.of(context).size.width *
+                      containerWidthFraction *
+                      0.7,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const MyHomePage()),
+                      );
+                    },
+                    child: const Text("Bosh sahifa"),
+                  ),
+                ),
               ],
             ),
           ),
@@ -3788,10 +3943,9 @@ class _QuizState extends State<Quiz> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const Succes()),
+                  MaterialPageRoute(builder: (context) => const Succes()),
                 );
-                },
+              },
             ),
           ],
         ),
@@ -3838,10 +3992,9 @@ class _QuizState extends State<Quiz> {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(
-                      builder: (context) => const Succes()),
+                  MaterialPageRoute(builder: (context) => const Succes()),
                 );
-                },
+              },
             ),
           ],
         ),
