@@ -3724,10 +3724,11 @@ class _LoginPage extends State<LoginPage> {
         //   MaterialPageRoute(builder: (context) => YourNextPage()),
         // );
       } else {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => const Fail()),
-        );
+        ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Muvaffaqqiyatsiz!'),
+        ),
+      );
       }
     } catch (e) {
       // Handle other exceptions (e.g., network issues) here
