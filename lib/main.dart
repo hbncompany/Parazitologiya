@@ -353,11 +353,15 @@ class MainPage extends StatelessWidget {
 }
 
 class MainPages extends StatelessWidget {
+  final double containerWidthFraction = 0.95;
+  final double containerHeightFraction = 0.95;
   @override
   Widget build(BuildContext context) {
+    final model = Provider.of<ThemeModel>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text('MAIN PAGES'),
+        iconTheme: IconThemeData(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white),
+        title: Text('MAIN PAGES', style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white),),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -386,11 +390,11 @@ class MainPages extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Image.asset(
-                                'assets/images/Lab.png'), // Replace with your image paths
+                                'assets/images/Lecture.jpg'), // Replace with your image paths
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text('Lab 1'),
+                            child: Text("Ma'ruzalar matni", style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white, fontSize: 20),),
                           ),
                         ],
                       ),
@@ -420,71 +424,7 @@ class MainPages extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text('Lab 2'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-              ],
-            ),
-            Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SecondaryPage(index: 3),
-                        ),
-                      );
-                    },
-                    child: Card(
-                      elevation: 8.0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Image.asset(
-                                'assets/images/Lab.png'), // Replace with your image paths
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Lab 3'),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SecondaryPage(index: 4),
-                        ),
-                      );
-                    },
-                    child: Card(
-                      elevation: 8.0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Image.asset(
-                                'assets/images/Lab.png'), // Replace with your image paths
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text('Lab 4'),
+                            child: Text("Laboratoriya", style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white, fontSize: 20),),
                           ),
                         ],
                       ),
