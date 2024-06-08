@@ -4,12 +4,18 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:share_plus/share_plus.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(MyApp());
+void main() {runApp(
+  MaterialApp(
+    theme: ThemeData.light(), // Provide light theme
+    darkTheme: ThemeData.dark(), // Provide dark theme
+    home: MyApp(),
+  ),
+);
 }
 
-class MyApp extends StatelessWidget {
+class MyApphh extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -20,6 +26,46 @@ class MyApp extends StatelessWidget {
           )),
       home: MainPage(),
     );
+  }
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider<ThemeModel>(
+      create: (_) => ThemeModel(),
+      child: Consumer<ThemeModel>(
+        builder: (_, model, __) {
+          return MaterialApp(
+              theme: ThemeData(
+                  appBarTheme: AppBarTheme(
+                    color: Colors.white54,
+                  )), // Provide light theme.
+            darkTheme: ThemeData.dark(), // Provide dark theme.
+            themeMode: model.mode, // Decides which theme to show.
+            home: MainPage()
+            // Scaffold(
+            //   appBar: AppBar(title: Text('Light/Dark Theme')),
+            //   body: ElevatedButton(
+            //     onPressed: () => model.toggleMode(),
+            //     child: Text('Toggle Theme'),
+            //   ),
+            // ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ThemeModel with ChangeNotifier {
+  ThemeMode _mode = ThemeMode.light;
+
+  ThemeMode get mode => _mode;
+
+  void toggleMode() {
+    _mode = _mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    notifyListeners();
   }
 }
 
@@ -43,23 +89,24 @@ class MainPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final double containerWidthFraction = 0.95;
     final double containerHeightFraction = 0.95;
+    final model = Provider.of<ThemeModel>(context);
     return Scaffold(
       appBar: AppBar(
+        iconTheme: IconThemeData(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white),
         elevation: 8.0,
-        title: const Text('F I Z I O L O G I Y A',
-          style: TextStyle(color: Colors.blue, fontSize: 25),),
+        title: Text('F I Z I O L O G I Y A',
+          style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white, fontSize: 25),),
         centerTitle: true,
         actions: [
           IconButton(
-            icon: const Icon(Icons.verified_user_rounded),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MainPages(),),
-              );
-            },
+            color: model.mode == ThemeMode.light ? Colors.black: Colors.white,
+            onPressed: () => model.toggleMode(),
+            icon: Icon(model.mode == ThemeMode.light ? Icons.nights_stay_outlined: Icons.wb_sunny_outlined)
+            // child: Text(model.mode == ThemeMode.light ? "Tungi rejim" : "Kunduzgi rejim"),
           ),
         ],
+        backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
+        // iconTheme: Theme.of(context).appBarTheme.iconTheme,
       ),
       drawer: SizedBox(
         width: MediaQuery.of(context).size.width * 0.5,
@@ -78,38 +125,35 @@ class MainPage extends StatelessWidget {
               children: <Widget>[
                 DrawerHeader(
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    // color: Theme.of(context).primaryColor,
                   ),
-                  child: Text(
-                    'Drawer Header',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 24,
-                    ),
+                  child: Column(
+                    children: [
+                      Container(
+                        height: MediaQuery.of(context).size.height *
+                            containerHeightFraction *
+                            0.16,
+                        child: Image.asset(
+                            'assets/images/Fplants.png'),
+                      ),
+                      Container(
+                        child: Text(
+                          'FIZIOLOGIYA',
+                          style: TextStyle(
+                            color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white,
+                            fontSize: 24,
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
                 ListTile(
-                  title: const Text(''),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => MainPages(),),
-                    );
-                  },
-                ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.verified_user,
+                  leading: Icon(
+                    model.mode == ThemeMode.light ? Icons.nights_stay_outlined: Icons.wb_sunny_outlined,
                   ),
-                  title: const Text('Profil'),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => SecondaryPage(index: 0)),
-                    );
-                  },
+                  title: Text(model.mode == ThemeMode.light ? "Tungi rejim" : "Kunduzgi rejim"),
+                  onTap: () => model.toggleMode(),
                 ),
                 ListTile(
                   leading: const Icon(
@@ -172,7 +216,7 @@ class MainPage extends StatelessWidget {
                             children: [
                               Flexible(
                                 child: Image.asset(
-                                    'assets/images/Plants.png'), // Replace with your image paths
+                                    'assets/images/Fplants.png'), // Replace with your image paths
                               ),
                             ],
                           ),
@@ -194,7 +238,6 @@ class MainPage extends StatelessWidget {
                         },
                         child: Card(
                           elevation: 8.0,
-                          color: Colors.white38,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -206,7 +249,7 @@ class MainPage extends StatelessWidget {
                                 height: MediaQuery.of(context).size.height *
                                     containerHeightFraction *
                                     0.1,
-                                color: Colors.white,
+                                // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
                                 child: Row(
                                   children: [
                                     Padding(
@@ -223,7 +266,7 @@ class MainPage extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text("O'zbek tilida darsliklar",
-                                        style: TextStyle(color: Colors.blueAccent, fontSize: 25),
+                                        style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white, fontSize: 25),
                                         textAlign: TextAlign.center,),
                                     ),
                                   ],
@@ -249,7 +292,6 @@ class MainPage extends StatelessWidget {
                         },
                         child: Card(
                           elevation: 8.0,
-                          color: Colors.white,
                           child: Column(
                             mainAxisSize: MainAxisSize.min,
                             mainAxisAlignment: MainAxisAlignment.center,
@@ -261,7 +303,6 @@ class MainPage extends StatelessWidget {
                                 height: MediaQuery.of(context).size.height *
                                     containerHeightFraction *
                                     0.1,
-                                color: Colors.white,
                                 child: Row(
                                   children: [
                                     Padding(
@@ -278,7 +319,7 @@ class MainPage extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Text("Уроки на русском языке",
-                                        style: TextStyle(color: Colors.blueAccent, fontSize: 25),
+                                        style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white, fontSize: 25),
                                         textAlign: TextAlign.center,),
                                     ),
                                   ],
