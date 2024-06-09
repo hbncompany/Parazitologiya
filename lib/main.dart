@@ -6,13 +6,14 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
 
-void main() {runApp(
-  MaterialApp(
-    theme: ThemeData.light(), // Provide light theme
-    darkTheme: ThemeData.dark(), // Provide dark theme
-    home: MyApp(),
-  ),
-);
+void main() {
+  runApp(
+    MaterialApp(
+      theme: ThemeData.light(), // Provide light theme
+      darkTheme: ThemeData.dark(), // Provide dark theme
+      home: MyApp(),
+    ),
+  );
 }
 
 class MyApphh extends StatelessWidget {
@@ -22,8 +23,8 @@ class MyApphh extends StatelessWidget {
       darkTheme: ThemeData.dark(),
       theme: ThemeData(
           appBarTheme: AppBarTheme(
-            color: Colors.white54,
-          )),
+        color: Colors.white54,
+      )),
       home: MainPage(),
     );
   }
@@ -39,19 +40,19 @@ class MyApp extends StatelessWidget {
           return MaterialApp(
               theme: ThemeData(
                   appBarTheme: AppBarTheme(
-                    color: Colors.white54,
-                  )), // Provide light theme.
-            darkTheme: ThemeData.dark(), // Provide dark theme.
-            themeMode: model.mode, // Decides which theme to show.
-            home: MainPage()
-            // Scaffold(
-            //   appBar: AppBar(title: Text('Light/Dark Theme')),
-            //   body: ElevatedButton(
-            //     onPressed: () => model.toggleMode(),
-            //     child: Text('Toggle Theme'),
-            //   ),
-            // ),
-          );
+                color: Colors.white54,
+              )), // Provide light theme.
+              darkTheme: ThemeData.dark(), // Provide dark theme.
+              themeMode: model.mode, // Decides which theme to show.
+              home: MainPage()
+              // Scaffold(
+              //   appBar: AppBar(title: Text('Light/Dark Theme')),
+              //   body: ElevatedButton(
+              //     onPressed: () => model.toggleMode(),
+              //     child: Text('Toggle Theme'),
+              //   ),
+              // ),
+              );
         },
       ),
     );
@@ -92,18 +93,30 @@ class MainPage extends StatelessWidget {
     final model = Provider.of<ThemeModel>(context);
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white),
+        iconTheme: IconThemeData(
+            color: model.mode == ThemeMode.light
+                ? Colors.blueAccent
+                : Colors.white),
         elevation: 8.0,
-        title: Text('F I Z I O L O G I Y A',
-          style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white, fontSize: 25),),
+        title: Text(
+          'F I Z I O L O G I Y A',
+          style: TextStyle(
+              color: model.mode == ThemeMode.light
+                  ? Colors.blueAccent
+                  : Colors.white,
+              fontSize: 25),
+        ),
         centerTitle: true,
         actions: [
           IconButton(
-            color: model.mode == ThemeMode.light ? Colors.black: Colors.white,
-            onPressed: () => model.toggleMode(),
-            icon: Icon(model.mode == ThemeMode.light ? Icons.nights_stay_outlined: Icons.wb_sunny_outlined)
-            // child: Text(model.mode == ThemeMode.light ? "Tungi rejim" : "Kunduzgi rejim"),
-          ),
+              color:
+                  model.mode == ThemeMode.light ? Colors.black : Colors.white,
+              onPressed: () => model.toggleMode(),
+              icon: Icon(model.mode == ThemeMode.light
+                  ? Icons.nights_stay_outlined
+                  : Icons.wb_sunny_outlined)
+              // child: Text(model.mode == ThemeMode.light ? "Tungi rejim" : "Kunduzgi rejim"),
+              ),
         ],
         backgroundColor: Theme.of(context).appBarTheme.backgroundColor,
         // iconTheme: Theme.of(context).appBarTheme.iconTheme,
@@ -125,23 +138,24 @@ class MainPage extends StatelessWidget {
               children: <Widget>[
                 DrawerHeader(
                   decoration: BoxDecoration(
-                    // color: Theme.of(context).primaryColor,
-                  ),
+                      // color: Theme.of(context).primaryColor,
+                      ),
                   child: Column(
                     children: [
                       Container(
                         height: MediaQuery.of(context).size.height *
                             containerHeightFraction *
                             0.16,
-                        child: Image.asset(
-                            'assets/images/Fplants.png'),
+                        child: Image.asset('assets/images/Fplants.png'),
                       ),
                       Container(
                         child: Text(
                           'FIZIOLOGIYA',
                           style: TextStyle(
-                            color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white,
-                            fontSize: 24,
+                            color: model.mode == ThemeMode.light
+                                ? Colors.blueAccent
+                                : Colors.white,
+                            fontSize: 16,
                           ),
                         ),
                       ),
@@ -150,9 +164,13 @@ class MainPage extends StatelessWidget {
                 ),
                 ListTile(
                   leading: Icon(
-                    model.mode == ThemeMode.light ? Icons.nights_stay_outlined: Icons.wb_sunny_outlined,
+                    model.mode == ThemeMode.light
+                        ? Icons.nights_stay_outlined
+                        : Icons.wb_sunny_outlined,
                   ),
-                  title: Text(model.mode == ThemeMode.light ? "Tungi rejim" : "Kunduzgi rejim"),
+                  title: Text(model.mode == ThemeMode.light
+                      ? "Tungi rejim"
+                      : "Kunduzgi rejim"),
                   onTap: () => model.toggleMode(),
                 ),
                 ListTile(
@@ -164,7 +182,8 @@ class MainPage extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => MainPages(),),
+                        builder: (context) => MainPages(),
+                      ),
                     );
                   },
                 ),
@@ -202,21 +221,49 @@ class MainPage extends StatelessWidget {
                   Flexible(
                     fit: FlexFit.loose,
                     child: GestureDetector(
-                      onTap: () {
-                      },
+                      onTap: () {},
                       child: Card(
                         elevation: 8.0,
                         child: Container(
                           width: MediaQuery.of(context).size.width *
                               containerWidthFraction *
                               1,
-                          child: Column(
+                          child: Row(
                             mainAxisSize: MainAxisSize.max,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
-                              Flexible(
-                                child: Image.asset(
-                                    'assets/images/Fplants.png'), // Replace with your image paths
+                              Column(
+                                // mainAxisSize: MainAxisSize.max,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                // mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  Flexible(
+                                    child: Image.asset(
+                                        'assets/images/Mainplant.png'), // Replace with your image paths
+                                  ),
+                                ],
+                              ),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Container(
+                                    child: Flexible(
+                                      child:Text("PLANT", style: TextStyle(fontSize: 32,
+                                          color: model.mode == ThemeMode.light
+                                              ? Colors.blueAccent
+                                              : Colors.white),)
+                                    ),
+                                  ),
+                                  Container(
+                                    child: Flexible(
+                                        child:Text("PHYSIOLOGY", style: TextStyle(fontSize: 32,
+                                            color: model.mode == ThemeMode.light
+                                                ? Colors.blueAccent
+                                                : Colors.white),)
+                                    ),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
@@ -255,19 +302,30 @@ class MainPage extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Container(
-                                          width: MediaQuery.of(context).size.width *
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
                                               containerWidthFraction *
                                               0.1,
-                                          height: MediaQuery.of(context).size.height *
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
                                               containerHeightFraction *
                                               0.1,
-                                          child: Image.asset('assets/images/Uzbekistan.jpg')),
+                                          child: Image.asset(
+                                              'assets/images/Uzbekistan.jpg')),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text("O'zbek tilida darsliklar",
-                                        style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white, fontSize: 25),
-                                        textAlign: TextAlign.center,),
+                                      child: Text(
+                                        "O'zbek tilida darsliklar",
+                                        style: TextStyle(
+                                            color: model.mode == ThemeMode.light
+                                                ? Colors.blueAccent
+                                                : Colors.white,
+                                            fontSize: 25),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -286,7 +344,7 @@ class MainPage extends StatelessWidget {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => MainPages(),
+                              builder: (context) => MainPages_ru(),
                             ),
                           );
                         },
@@ -308,19 +366,30 @@ class MainPage extends StatelessWidget {
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
                                       child: Container(
-                                          width: MediaQuery.of(context).size.width *
+                                          width: MediaQuery.of(context)
+                                                  .size
+                                                  .width *
                                               containerWidthFraction *
                                               0.1,
-                                          height: MediaQuery.of(context).size.height *
+                                          height: MediaQuery.of(context)
+                                                  .size
+                                                  .height *
                                               containerHeightFraction *
                                               0.1,
-                                          child: Image.asset('assets/images/Russian.png')),
+                                          child: Image.asset(
+                                              'assets/images/Russian.png')),
                                     ),
                                     Padding(
                                       padding: const EdgeInsets.all(8.0),
-                                      child: Text("Уроки на русском языке",
-                                        style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white, fontSize: 25),
-                                        textAlign: TextAlign.center,),
+                                      child: Text(
+                                        "Уроки на русском языке",
+                                        style: TextStyle(
+                                            color: model.mode == ThemeMode.light
+                                                ? Colors.blueAccent
+                                                : Colors.white,
+                                            fontSize: 25),
+                                        textAlign: TextAlign.center,
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -341,9 +410,14 @@ class MainPage extends StatelessWidget {
         child: Row(
           children: [
             IconButton(icon: Icon(Icons.person_3_rounded), onPressed: () {}),
-            Text("Muallif: Falonchiyev Fistonchi",
+            Text(
+              "Muallif: ...... .....",
               textAlign: TextAlign.center,
-              style: TextStyle(color: Colors.blueAccent, fontSize: 20),),
+              style: TextStyle(
+                  color: model.mode == ThemeMode.light
+                      ? Colors.blueAccent
+                      : Colors.white, fontSize: 20),
+            ),
             Spacer(),
           ],
         ),
@@ -360,8 +434,17 @@ class MainPages extends StatelessWidget {
     final model = Provider.of<ThemeModel>(context);
     return Scaffold(
       appBar: AppBar(
-        iconTheme: IconThemeData(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white),
-        title: Text('MAIN PAGES', style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white),),
+        iconTheme: IconThemeData(
+            color: model.mode == ThemeMode.light
+                ? Colors.blueAccent
+                : Colors.white),
+        title: Text(
+          "O'zbek tilida darsliklar",
+          style: TextStyle(
+              color: model.mode == ThemeMode.light
+                  ? Colors.blueAccent
+                  : Colors.white),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -375,12 +458,8 @@ class MainPages extends StatelessWidget {
                   fit: FlexFit.loose,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SecondaryPage(index: 1),
-                        ),
-                      );
+                      openPDF(context,
+                          'assets/pdf/Maruza_uz.pdf'); // Replace with your PDF paths
                     },
                     child: Card(
                       elevation: 8.0,
@@ -390,11 +469,18 @@ class MainPages extends StatelessWidget {
                         children: [
                           Flexible(
                             child: Image.asset(
-                                'assets/images/Lecture.jpg'), // Replace with your image paths
+                                'assets/images/Book.png'), // Replace with your image paths
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Ma'ruzalar matni", style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white, fontSize: 20),),
+                            child: Text(
+                              "Ma'ruzalar matni",
+                              style: TextStyle(
+                                  color: model.mode == ThemeMode.light
+                                      ? Colors.blueAccent
+                                      : Colors.white,
+                                  fontSize: 20),
+                            ),
                           ),
                         ],
                       ),
@@ -405,12 +491,8 @@ class MainPages extends StatelessWidget {
                   fit: FlexFit.loose,
                   child: GestureDetector(
                     onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => SecondaryPage(index: 2),
-                        ),
-                      );
+                      openPDF(context,
+                          'assets/pdf/Laboratoriya.pdf'); // Replace with your PDF paths
                     },
                     child: Card(
                       elevation: 8.0,
@@ -424,7 +506,14 @@ class MainPages extends StatelessWidget {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Text("Laboratoriya", style: TextStyle(color: model.mode == ThemeMode.light ? Colors.blueAccent: Colors.white, fontSize: 20),),
+                            child: Text(
+                              "Laboratoriya",
+                              style: TextStyle(
+                                  color: model.mode == ThemeMode.light
+                                      ? Colors.blueAccent
+                                      : Colors.white,
+                                  fontSize: 20),
+                            ),
                           ),
                         ],
                       ),
@@ -435,6 +524,139 @@ class MainPages extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void openPDF(BuildContext context, String assetPath) async {
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/${assetPath.split('/').last}");
+    final data = await rootBundle.load(assetPath);
+    final bytes = data.buffer.asUint8List();
+    await file.writeAsBytes(bytes, flush: true);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PDFViewPage(path: file.path),
+      ),
+    );
+  }
+}
+
+class MainPages_ru extends StatelessWidget {
+  final double containerWidthFraction = 0.95;
+  final double containerHeightFraction = 0.95;
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<ThemeModel>(context);
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: model.mode == ThemeMode.light
+                ? Colors.blueAccent
+                : Colors.white),
+        title: Text(
+          "Уроки на русском языке",
+          style: TextStyle(
+              color: model.mode == ThemeMode.light
+                  ? Colors.blueAccent
+                  : Colors.white),
+        ),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Row(
+              children: [
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: GestureDetector(
+                    onTap: () {
+                      openPDF(context,
+                          'assets/pdf/Maruza_ru.pdf'); // Replace with your PDF paths
+                    },
+                    child: Card(
+                      elevation: 8.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: Image.asset(
+                                'assets/images/Book.png'), // Replace with your image paths
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Лекция",
+                              style: TextStyle(
+                                  color: model.mode == ThemeMode.light
+                                      ? Colors.blueAccent
+                                      : Colors.white,
+                                  fontSize: 20),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+                Flexible(
+                  fit: FlexFit.loose,
+                  child: GestureDetector(
+                    onTap: () {
+                      openPDF(context,
+                          'assets/pdf/Laboratoriya_ru.pdf'); // Replace with your PDF paths
+                    },
+                    child: Card(
+                      elevation: 8.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Flexible(
+                            child: Image.asset(
+                                'assets/images/Lab.png'), // Replace with your image paths
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Text(
+                              "Лаборатория",
+                              style: TextStyle(
+                                  color: model.mode == ThemeMode.light
+                                      ? Colors.blueAccent
+                                      : Colors.white,
+                                  fontSize: 20),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void openPDF(BuildContext context, String assetPath) async {
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/${assetPath.split('/').last}");
+    final data = await rootBundle.load(assetPath);
+    final bytes = data.buffer.asUint8List();
+    await file.writeAsBytes(bytes, flush: true);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PDFViewPage(path: file.path),
       ),
     );
   }
@@ -508,15 +730,29 @@ class _PDFViewPageState extends State<PDFViewPage> {
 
   @override
   Widget build(BuildContext context) {
+    final model = Provider.of<ThemeModel>(context);
     return Scaffold(
       appBar: AppBar(
-        title: Text("PDF Viewer"),
+        iconTheme: IconThemeData(
+            color: model.mode == ThemeMode.light
+                ? Colors.blueAccent
+                : Colors.white),
+        elevation: 8.0,
+        title: Text("READING",
+            style: TextStyle(
+            color: model.mode == ThemeMode.light
+            ? Colors.blueAccent
+                : Colors.white),),
         actions: [
           if (_isReady)
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Center(
-                child: Text('${_currentPage + 1}/$_totalPages'),
+                child: Text('${_currentPage + 1}/$_totalPages',
+                  style: TextStyle(
+                      color: model.mode == ThemeMode.light
+                          ? Colors.blueAccent
+                          : Colors.white),),
               ),
             ),
           IconButton(

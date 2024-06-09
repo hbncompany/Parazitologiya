@@ -72,10 +72,8 @@ dev_dependencies:
 flutter:
   assets:
     - assets/
-    - assets/videos/
+    - assets/pdf/
     - assets/images/
-    - assets/PPTLectuer/
-    - assets/PPTLab/
   fonts:
     - family: Montserrat
       fonts:

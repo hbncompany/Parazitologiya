@@ -6,7 +6,8 @@ class ThemeNotifier with ChangeNotifier {
     primarySwatch: Colors.grey,
     primaryColor: Colors.black,
     brightness: Brightness.dark,
-    backgroundColor: const Color(0xFF212121),
+    // backgroundColor: const Color(0xFF212121),
+    backgroundColor: Colors.black,
     colorScheme: ColorScheme.dark(
       primary: Colors.black,
       secondary: Colors.white,
