@@ -5,6 +5,7 @@ import 'dart:io';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
+import 'responsive_text.dart';
 
 void main() {
   runApp(
@@ -173,20 +174,6 @@ class MainPage extends StatelessWidget {
                       : "Kunduzgi rejim"),
                   onTap: () => model.toggleMode(),
                 ),
-                ListTile(
-                  leading: const Icon(
-                    Icons.person,
-                  ),
-                  title: const Text("O'qituvchi"),
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => MainPages(),
-                      ),
-                    );
-                  },
-                ),
                 const AboutListTile(
                   icon: Icon(
                     Icons.info,
@@ -204,30 +191,35 @@ class MainPage extends StatelessWidget {
           ),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(5.0),
-        child: Row(
-          children: [
-            Container(
-              height: MediaQuery.of(context).size.height *
-                  containerHeightFraction *
-                  5,
-              child: Column(
-                // mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: <Widget>[
-                  const Padding(padding: EdgeInsets.only(top: 3.0)),
-                  Flexible(
-                    fit: FlexFit.loose,
-                    child: GestureDetector(
-                      onTap: () {},
-                      child: Card(
-                        elevation: 8.0,
-                        child: Container(
-                          width: MediaQuery.of(context).size.width *
-                              containerWidthFraction *
-                              1,
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.2,
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(5.0),
+          child:
+              SizedBox(
+                height: MediaQuery.of(context).size.height *
+                    containerHeightFraction *
+                    5,
+                child: Column(
+                  // mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    const Padding(padding: EdgeInsets.only(top: 3.0)),
+                    Flexible(
+                      flex: 1,
+                      fit: FlexFit.tight,
+                      child: GestureDetector(
+                        onTap: () {},
+                        child: Card(
+                          elevation: 8.0,
                           child: Row(
                             mainAxisSize: MainAxisSize.max,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -240,28 +232,7 @@ class MainPage extends StatelessWidget {
                                 children: [
                                   Flexible(
                                     child: Image.asset(
-                                        'assets/images/Mainplant.png'), // Replace with your image paths
-                                  ),
-                                ],
-                              ),
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Container(
-                                    child: Flexible(
-                                      child:Text("PLANT", style: TextStyle(fontSize: 32,
-                                          color: model.mode == ThemeMode.light
-                                              ? Colors.blueAccent
-                                              : Colors.white),)
-                                    ),
-                                  ),
-                                  Container(
-                                    child: Flexible(
-                                        child:Text("PHYSIOLOGY", style: TextStyle(fontSize: 32,
-                                            color: model.mode == ThemeMode.light
-                                                ? Colors.blueAccent
-                                                : Colors.white),)
-                                    ),
+                                        'assets/images/nature.png'), // Replace with your image paths
                                   ),
                                 ],
                               ),
@@ -270,140 +241,138 @@ class MainPage extends StatelessWidget {
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    child: Flexible(
-                      fit: FlexFit.loose,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MainPages(),
-                            ),
-                          );
-                        },
-                        child: Card(
-                          elevation: 8.0,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width *
-                                    containerWidthFraction *
-                                    1,
-                                height: MediaQuery.of(context).size.height *
-                                    containerHeightFraction *
-                                    0.1,
-                                // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              containerWidthFraction *
-                                              0.1,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              containerHeightFraction *
-                                              0.1,
-                                          child: Image.asset(
-                                              'assets/images/Uzbekistan.jpg')),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "O'zbek tilida darsliklar",
-                                        style: TextStyle(
-                                            color: model.mode == ThemeMode.light
-                                                ? Colors.blueAccent
-                                                : Colors.white,
-                                            fontSize: 25),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainPages(),
                               ),
-                            ],
+                            );
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/Uzbekistan.jpg')),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          "O'zbek tilida darsliklar",
+                                          style: TextStyle(
+                                              color: model.mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 25),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                  Container(
-                    child: Flexible(
-                      fit: FlexFit.loose,
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => MainPages_ru(),
-                            ),
-                          );
-                        },
-                        child: Card(
-                          elevation: 8.0,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              Container(
-                                width: MediaQuery.of(context).size.width *
-                                    containerWidthFraction *
-                                    1,
-                                height: MediaQuery.of(context).size.height *
-                                    containerHeightFraction *
-                                    0.1,
-                                child: Row(
-                                  children: [
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Container(
-                                          width: MediaQuery.of(context)
-                                                  .size
-                                                  .width *
-                                              containerWidthFraction *
-                                              0.1,
-                                          height: MediaQuery.of(context)
-                                                  .size
-                                                  .height *
-                                              containerHeightFraction *
-                                              0.1,
-                                          child: Image.asset(
-                                              'assets/images/Russian.png')),
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        "Уроки на русском языке",
-                                        style: TextStyle(
-                                            color: model.mode == ThemeMode.light
-                                                ? Colors.blueAccent
-                                                : Colors.white,
-                                            fontSize: 25),
-                                        textAlign: TextAlign.center,
-                                      ),
-                                    ),
-                                  ],
-                                ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MainPages_ru(),
                               ),
-                            ],
+                            );
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                    .size
+                                                    .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                    .size
+                                                    .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/Russian.png')),
+                                      ),
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Text(
+                                          "Уроки на русском языке",
+                                          style: TextStyle(
+                                              color: model.mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 25),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
                           ),
                         ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ),
-          ],
         ),
       ),
       bottomNavigationBar: BottomAppBar(
@@ -446,83 +415,100 @@ class MainPages extends StatelessWidget {
                   : Colors.white),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: GestureDetector(
-                    onTap: () {
-                      openPDF(context,
-                          'assets/pdf/Maruza_uz.pdf'); // Replace with your PDF paths
-                    },
-                    child: Card(
-                      elevation: 8.0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Image.asset(
-                                'assets/images/Book.png'), // Replace with your image paths
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Ma'ruzalar matni",
-                              style: TextStyle(
-                                  color: model.mode == ThemeMode.light
-                                      ? Colors.blueAccent
-                                      : Colors.white,
-                                  fontSize: 20),
+      body: Container(
+        height: MediaQuery.of(context).size.height *
+            containerHeightFraction *
+            1,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.2,
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: [
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: GestureDetector(
+                      onTap: () {
+                        openPDF(context,
+                            'assets/pdf/Maruza_uz.pdf'); // Replace with your PDF paths
+                      },
+                      child: Card(
+                        elevation: 8.0,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Image.asset(
+                                  'assets/images/Book.png'), // Replace with your image paths
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Ma'ruzalar matni",
+                                style: TextStyle(
+                                    color: model.mode == ThemeMode.light
+                                        ? Colors.blueAccent
+                                        : Colors.white,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: GestureDetector(
-                    onTap: () {
-                      openPDF(context,
-                          'assets/pdf/Laboratoriya.pdf'); // Replace with your PDF paths
-                    },
-                    child: Card(
-                      elevation: 8.0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Image.asset(
-                                'assets/images/Lab.png'), // Replace with your image paths
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => BOOK_page(),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Laboratoriya",
-                              style: TextStyle(
-                                  color: model.mode == ThemeMode.light
-                                      ? Colors.blueAccent
-                                      : Colors.white,
-                                  fontSize: 20),
+                        );
+                      },
+                      child: Card(
+                        elevation: 8.0,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Image.asset(
+                                  'assets/images/Lab.png'), // Replace with your image paths
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Laboratoriya",
+                                style: TextStyle(
+                                    color: model.mode == ThemeMode.light
+                                        ? Colors.blueAccent
+                                        : Colors.white,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -543,6 +529,193 @@ class MainPages extends StatelessWidget {
     );
   }
 }
+
+class BOOK_page extends StatelessWidget {
+  final double containerWidthFraction = 0.95;
+  final double containerHeightFraction = 0.95;
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<ThemeModel>(context);
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: model.mode == ThemeMode.light
+                ? Colors.blueAccent
+                : Colors.white),
+        title: Text(
+          "O'zbek tilida darsliklar",
+          style: TextStyle(
+              color: model.mode == ThemeMode.light
+                  ? Colors.blueAccent
+                  : Colors.white),
+        ),
+      ),
+      body: Container(
+        height: MediaQuery.of(context).size.height *
+            containerHeightFraction *
+            1,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.2,
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Container(
+                child: Flexible(
+                  fit: FlexFit.loose,
+                  child: GestureDetector(
+                    onTap: () {
+                      openPDF(context,
+                          'assets/pdf/LAB_UZ_PDF/1.pdf'); // Replace with your PDF paths
+                    },
+                    child: Card(
+                      elevation: 8.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width *
+                                containerWidthFraction *
+                                1,
+                            height: MediaQuery.of(context).size.height *
+                                containerHeightFraction *
+                                0.1,
+                            // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                      width: MediaQuery.of(context)
+                                          .size
+                                          .width *
+                                          containerWidthFraction *
+                                          0.1,
+                                      height: MediaQuery.of(context)
+                                          .size
+                                          .height *
+                                          containerHeightFraction *
+                                          0.1,
+                                      child: Image.asset(
+                                          'assets/images/Uzbekistan.jpg')),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "O'zbek tilida darsliklar",
+                                    style: TextStyle(
+                                        color: model.mode == ThemeMode.light
+                                            ? Colors.blueAccent
+                                            : Colors.white,
+                                        fontSize: 25),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              Container(
+                child: Flexible(
+                  fit: FlexFit.loose,
+                  child: GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => MainPages_ru(),
+                        ),
+                      );
+                    },
+                    child: Card(
+                      elevation: 8.0,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Container(
+                            width: MediaQuery.of(context).size.width *
+                                containerWidthFraction *
+                                1,
+                            height: MediaQuery.of(context).size.height *
+                                containerHeightFraction *
+                                0.1,
+                            child: Row(
+                              children: [
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Container(
+                                      width: MediaQuery.of(context)
+                                          .size
+                                          .width *
+                                          containerWidthFraction *
+                                          0.1,
+                                      height: MediaQuery.of(context)
+                                          .size
+                                          .height *
+                                          containerHeightFraction *
+                                          0.1,
+                                      child: Image.asset(
+                                          'assets/images/Russian.png')),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    "Уроки на русском языке",
+                                    style: TextStyle(
+                                        color: model.mode == ThemeMode.light
+                                            ? Colors.blueAccent
+                                            : Colors.white,
+                                        fontSize: 25),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  void openPDF(BuildContext context, String assetPath) async {
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/${assetPath.split('/').last}");
+    final data = await rootBundle.load(assetPath);
+    final bytes = data.buffer.asUint8List();
+    await file.writeAsBytes(bytes, flush: true);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PDFViewPage(path: file.path),
+      ),
+    );
+  }
+}
+
 
 class MainPages_ru extends StatelessWidget {
   final double containerWidthFraction = 0.95;

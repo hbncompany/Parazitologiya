@@ -73,6 +73,10 @@ flutter:
   assets:
     - assets/
     - assets/pdf/
+    - assets/pdf/LAB_UZ_PDF/
+    - assets/pdf/LAB_RU_PDF/
+    - assets/pdf/LEK_UZ_PDF/
+    - assets/pdf/LEK_RU_PDF/
     - assets/images/
   fonts:
     - family: Montserrat
