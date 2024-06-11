@@ -6,6 +6,7 @@ import 'package:flutter/services.dart' show rootBundle;
 import 'package:share_plus/share_plus.dart';
 import 'package:provider/provider.dart';
 import 'responsive_text.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 void main() {
   runApp(
@@ -63,11 +64,32 @@ class MyApp extends StatelessWidget {
 class ThemeModel with ChangeNotifier {
   ThemeMode _mode = ThemeMode.light;
 
+  ThemeModel() {
+    _loadThemeMode();
+  }
+
   ThemeMode get mode => _mode;
 
   void toggleMode() {
-    _mode = _mode == ThemeMode.light ? ThemeMode.dark : ThemeMode.light;
+    if (_mode == ThemeMode.light) {
+      _mode = ThemeMode.dark;
+    } else {
+      _mode = ThemeMode.light;
+    }
+    _saveThemeMode();
     notifyListeners();
+  }
+
+  void _loadThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    final themeString = prefs.getString('themeMode') ?? 'light';
+    _mode = themeString == 'light' ? ThemeMode.light : ThemeMode.dark;
+    notifyListeners();
+  }
+
+  void _saveThemeMode() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('themeMode', _mode == ThemeMode.light ? 'light' : 'dark');
   }
 }
 
@@ -375,13 +397,13 @@ class MainPage extends StatelessWidget {
           children: [
             IconButton(icon: Icon(Icons.person_3_rounded), onPressed: () {}),
             Text(
-              "Muallif: ...... .....",
+              "Muallif: Tolibova Munisa Jurabek qizi",
               textAlign: TextAlign.center,
               style: TextStyle(
                   color: model.mode == ThemeMode.light
                       ? Colors.blueAccent
                       : Colors.white,
-                  fontSize: 20),
+                  fontSize: 18),
             ),
             Spacer(),
           ],
@@ -1147,14 +1169,17 @@ class Lab_page extends StatelessWidget {
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
                                         child: Text(
-                                          "1-Laboratoriya mashg'uloti",
+                                          "1-Laboratoriya - Turgor hodisasi",
                                           style: TextStyle(
-                                              color:
-                                                  model.mode == ThemeMode.light
-                                                      ? Colors.blueAccent
-                                                      : Colors.white,
-                                              fontSize: 18),
-                                          textAlign: TextAlign.center,
+                                            color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                ? Colors.blueAccent
+                                                : Colors.white,
+                                            fontSize: 18,
+                                            textBaseline: TextBaseline.ideographic,
+                                          ),
+                                          maxLines: null, // Allow unlimited lines
+                                          overflow: TextOverflow.visible, // Display text as-is without truncation
+                                          textAlign: TextAlign.start,
                                         ),
                                       ),
                                     ],
@@ -1206,17 +1231,22 @@ class Lab_page extends StatelessWidget {
                                             child: Image.asset(
                                                 'assets/images/Lab.png')),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "2-Laboratoriya mashg'uloti",
-                                          style: TextStyle(
-                                              color:
-                                                  model.mode == ThemeMode.light
-                                                      ? Colors.blueAccent
-                                                      : Colors.white,
-                                              fontSize: 18),
-                                          textAlign: TextAlign.center,
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "2-Laboratoriya - Barg og'izchalari harakati, ochilish darajasi",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -1268,17 +1298,22 @@ class Lab_page extends StatelessWidget {
                                             child: Image.asset(
                                                 'assets/images/Lab.png')),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "3-Laboratoriya mashg'uloti",
-                                          style: TextStyle(
-                                              color:
-                                                  model.mode == ThemeMode.light
-                                                      ? Colors.blueAccent
-                                                      : Colors.white,
-                                              fontSize: 18),
-                                          textAlign: TextAlign.center,
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "3-Laboratoriya - Barg og'izchalari harakati, ochilish darajasi",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -1330,17 +1365,22 @@ class Lab_page extends StatelessWidget {
                                             child: Image.asset(
                                                 'assets/images/Lab.png')),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "4-Laboratoriya mashg'uloti",
-                                          style: TextStyle(
-                                              color:
-                                                  model.mode == ThemeMode.light
-                                                      ? Colors.blueAccent
-                                                      : Colors.white,
-                                              fontSize: 18),
-                                          textAlign: TextAlign.center,
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "4-Laboratoriya - Barg pigmentlari va ularning xususiyatlari",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -1372,7 +1412,7 @@ class Lab_page extends StatelessWidget {
                                       1,
                                   height: MediaQuery.of(context).size.height *
                                       containerHeightFraction *
-                                      0.1,
+                                      0.13,
                                   // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
                                   child: Row(
                                     children: [
@@ -1392,17 +1432,22 @@ class Lab_page extends StatelessWidget {
                                             child: Image.asset(
                                                 'assets/images/Lab.png')),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "5-Laboratoriya mashg'uloti",
-                                          style: TextStyle(
-                                              color:
-                                                  model.mode == ThemeMode.light
-                                                      ? Colors.blueAccent
-                                                      : Colors.white,
-                                              fontSize: 18),
-                                          textAlign: TextAlign.center,
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "5-Laboratoriya - Unib chiqayotgan urug’larning O2 ning yutilishi va CO2 ning ajralishi",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -1454,17 +1499,22 @@ class Lab_page extends StatelessWidget {
                                             child: Image.asset(
                                                 'assets/images/Lab.png')),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "6-Laboratoriya mashg'uloti",
-                                          style: TextStyle(
-                                              color:
-                                                  model.mode == ThemeMode.light
-                                                      ? Colors.blueAccent
-                                                      : Colors.white,
-                                              fontSize: 18),
-                                          textAlign: TextAlign.center,
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "6-Laboratoriya - O’simlik kulida uchraydigan elementlarni aniqlash",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -1516,17 +1566,22 @@ class Lab_page extends StatelessWidget {
                                             child: Image.asset(
                                                 'assets/images/Lab.png')),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "7-Laboratoriya mashg'uloti",
-                                          style: TextStyle(
-                                              color:
-                                                  model.mode == ThemeMode.light
-                                                      ? Colors.blueAccent
-                                                      : Colors.white,
-                                              fontSize: 18),
-                                          textAlign: TextAlign.center,
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "7-Laboratoriya - O’simlik ildizining hajmi",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -1578,17 +1633,22 @@ class Lab_page extends StatelessWidget {
                                             child: Image.asset(
                                                 'assets/images/Lab.png')),
                                       ),
-                                      Padding(
-                                        padding: const EdgeInsets.all(8.0),
-                                        child: Text(
-                                          "8-Laboratoriya mashg'uloti",
-                                          style: TextStyle(
-                                              color:
-                                                  model.mode == ThemeMode.light
-                                                      ? Colors.blueAccent
-                                                      : Colors.white,
-                                              fontSize: 18),
-                                          textAlign: TextAlign.center,
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "8-Laboratoriya - O’simlik shirasi tarkibida saxarozani aniqlash",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
                                         ),
                                       ),
                                     ],
@@ -1686,7 +1746,7 @@ class Lek_page_ru extends StatelessWidget {
                                       1,
                                   height: MediaQuery.of(context).size.height *
                                       containerHeightFraction *
-                                      0.1,
+                                      0.13,
                                   // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
                                   child: Row(
                                     children: [
@@ -1710,7 +1770,7 @@ class Lek_page_ru extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
-                                            "1. Войти . Цель и задачи науки физиологии растений Физиология растительной клетки",
+                                            "1. Цель и задачи науки физиологии растений Физиология растительной клетки",
                                             style: TextStyle(
                                               color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
                                                   ? Colors.blueAccent
@@ -1739,7 +1799,7 @@ class Lek_page_ru extends StatelessWidget {
                         child: GestureDetector(
                           onTap: () {
                             openPDF(context,
-                                'assets/pdf/LEK_RU_PDF/1.pdf'); // Replace with your PDF paths
+                                'assets/pdf/LEK_RU_PDF/2.pdf'); // Replace with your PDF paths
                           },
                           child: Card(
                             elevation: 8.0,
@@ -1777,7 +1837,944 @@ class Lek_page_ru extends StatelessWidget {
                                         child: Padding(
                                           padding: const EdgeInsets.all(8.0),
                                           child: Text(
-                                            "1. Kirish. O’simliklar fiziologiyasi fanining maqsadi va vazifalari",
+                                            "2. Движение хлоропластов, световые реакции фотосинтеза",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LEK_RU_PDF/3.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/lecture.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "3. Кастомизация. Дышим в свете фотографии",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LEK_RU_PDF/4.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/lecture.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "4. Механизм управления процессами роста. Фитогормоны",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LEK_RU_PDF/5.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/lecture.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "5. Экология водообмена растений",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LEK_RU_PDF/6.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/lecture.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "6. Питание растений через корни",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LEK_RU_PDF/7.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/lecture.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "7. Виды внешних факторов, Биологические факторы, Вирусы",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void openPDF(BuildContext context, String assetPath) async {
+    final output = await getTemporaryDirectory();
+    final file = File("${output.path}/${assetPath.split('/').last}");
+    final data = await rootBundle.load(assetPath);
+    final bytes = data.buffer.asUint8List();
+    await file.writeAsBytes(bytes, flush: true);
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => PDFViewPage(path: file.path),
+      ),
+    );
+  }
+}
+
+class Lab_page_ru extends StatelessWidget {
+  final double containerWidthFraction = 0.95;
+  final double containerHeightFraction = 0.95;
+  @override
+  Widget build(BuildContext context) {
+    final model = Provider.of<ThemeModel>(context);
+    return Scaffold(
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+            color: model.mode == ThemeMode.light
+                ? Colors.blueAccent
+                : Colors.white),
+        title: Text(
+          "Лекция",
+          style: TextStyle(
+              color: model.mode == ThemeMode.light
+                  ? Colors.blueAccent
+                  : Colors.white),
+        ),
+      ),
+      body: Container(
+        height:
+        MediaQuery.of(context).size.height * containerHeightFraction * 1,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.2,
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: ListView(
+          children: [
+            SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LAB_RU_PDF/1.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/Lab.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "1. Лаборатория - Тургор событие",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LAB_RU_PDF/2.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.13,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/Lab.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "2. Лаборатория - Передвижения створных порталов, степени открытия и состояния",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LAB_RU_PDF/3.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.13,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/Lab.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "3. Лаборатория - Определение влияния кутикулы и коры на испарение воды растениями",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LAB_RU_PDF/4.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/Lab.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "4. Лаборатория - Бар арг пигменты и их свойства",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LAB_RU_PDF/5.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.13,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/Lab.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "5. Лаборатория - Университет выход семян О 2 из глотание и СО2 _ из разлука",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LAB_RU_PDF/6.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.13,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/Lab.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "6. Лаборатория - Растение в пепле происходящий элементы определение",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LAB_RU_PDF/7.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/Lab.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "7. Лаборатория - Растение корня",
+                                            style: TextStyle(
+                                              color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
+                                                  ? Colors.blueAccent
+                                                  : Colors.white,
+                                              fontSize: 18,
+                                              textBaseline: TextBaseline.ideographic,
+                                            ),
+                                            maxLines: null, // Allow unlimited lines
+                                            overflow: TextOverflow.visible, // Display text as-is without truncation
+                                            textAlign: TextAlign.start,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    Container(
+                      child: Flexible(
+                        fit: FlexFit.loose,
+                        child: GestureDetector(
+                          onTap: () {
+                            openPDF(context,
+                                'assets/pdf/LAB_RU_PDF/8.pdf'); // Replace with your PDF paths
+                          },
+                          child: Card(
+                            elevation: 8.0,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Container(
+                                  width: MediaQuery.of(context).size.width *
+                                      containerWidthFraction *
+                                      1,
+                                  height: MediaQuery.of(context).size.height *
+                                      containerHeightFraction *
+                                      0.1,
+                                  // color: model.mode == ThemeMode.light ? Colors.white:Colors.grey,
+                                  child: Row(
+                                    children: [
+                                      Padding(
+                                        padding: const EdgeInsets.all(8.0),
+                                        child: Container(
+                                            width: MediaQuery.of(context)
+                                                .size
+                                                .width *
+                                                containerWidthFraction *
+                                                0.1,
+                                            height: MediaQuery.of(context)
+                                                .size
+                                                .height *
+                                                containerHeightFraction *
+                                                0.1,
+                                            child: Image.asset(
+                                                'assets/images/Lab.png')),
+                                      ),
+                                      Flexible(
+                                        child: Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            "8. Лаборатория - Каталаза фермент определитель инструмент",
                                             style: TextStyle(
                                               color: Provider.of<ThemeModel>(context).mode == ThemeMode.light
                                                   ? Colors.blueAccent
@@ -1846,91 +2843,103 @@ class MainPages_ru extends StatelessWidget {
                   : Colors.white),
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: <Widget>[
-            Row(
-              children: [
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Lek_page_ru(),
-                        ),
-                      );
-                    },
-                    child: Card(
-                      elevation: 8.0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Image.asset(
-                                'assets/images/Book.png'), // Replace with your image paths
+      body: Container(
+        height:
+        MediaQuery.of(context).size.height * containerHeightFraction * 1,
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+            opacity: 0.2,
+            image: AssetImage(
+                'assets/images/back.jpg'), // Replace with your image asset path
+            fit: BoxFit.fill,
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: <Widget>[
+              Row(
+                children: [
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Lek_page_ru(),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Лекция",
-                              style: TextStyle(
-                                  color: model.mode == ThemeMode.light
-                                      ? Colors.blueAccent
-                                      : Colors.white,
-                                  fontSize: 20),
+                        );
+                      },
+                      child: Card(
+                        elevation: 8.0,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Image.asset(
+                                  'assets/images/Book.png'), // Replace with your image paths
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Лекция",
+                                style: TextStyle(
+                                    color: model.mode == ThemeMode.light
+                                        ? Colors.blueAccent
+                                        : Colors.white,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-                Flexible(
-                  fit: FlexFit.loose,
-                  child: GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => Lek_page_ru(),
-                        ),
-                      );
-                    },
-                    child: Card(
-                      elevation: 8.0,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            child: Image.asset(
-                                'assets/images/Lab.png'), // Replace with your image paths
+                  Flexible(
+                    fit: FlexFit.loose,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => Lab_page_ru(),
                           ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              "Лаборатория",
-                              style: TextStyle(
-                                  color: model.mode == ThemeMode.light
-                                      ? Colors.blueAccent
-                                      : Colors.white,
-                                  fontSize: 20),
+                        );
+                      },
+                      child: Card(
+                        elevation: 8.0,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Flexible(
+                              child: Image.asset(
+                                  'assets/images/Lab.png'), // Replace with your image paths
                             ),
-                          ),
-                        ],
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Text(
+                                "Лаборатория",
+                                style: TextStyle(
+                                    color: model.mode == ThemeMode.light
+                                        ? Colors.blueAccent
+                                        : Colors.white,
+                                    fontSize: 20),
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            ),
-          ],
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
