@@ -2234,7 +2234,7 @@ class Lab_page_ru extends StatelessWidget {
                 ? Colors.blueAccent
                 : Colors.white),
         title: Text(
-          "Лекция",
+          "Лаборатория",
           style: TextStyle(
               color: model.mode == ThemeMode.light
                   ? Colors.blueAccent

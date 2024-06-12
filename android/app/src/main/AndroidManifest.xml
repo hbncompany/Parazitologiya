@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="flutterEmbedding"/>
     <application
-        android:label="Fiziologiya"
+        android:label="O'simliklar fiziologiyasi"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity
