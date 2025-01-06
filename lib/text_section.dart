@@ -10,7 +10,7 @@ class TextSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Container(
@@ -79,50 +79,46 @@ class TextSectionone extends StatelessWidget {
 }
 
 class TextSectiontwo extends StatelessWidget {
+  final double containerWidthFraction = 0.45;
+  final double containerHeightFraction = 0.15;
   final String _title;
-  final String _body;
   static const double _hPad = 20.0;
 
-  TextSectiontwo(this._title, this._body);
+  TextSectiontwo(this._title);
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.end,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Container(
-          padding: const EdgeInsets.fromLTRB(1, 10.0, 1, 10.0),
-          child: Container(
-            child: Text(
-              _title,
-              style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontWeight: FontWeight.w600,
-                  shadows: [
-                    Shadow(
-                      color: Colors.black, // Choose the color of the shadow
-                      blurRadius:
-                      3.0, // Adjust the blur radius for the shadow effect
-                      offset: Offset(3.0,
-                          3.0), // Set the horizontal and vertical offset for the shadow
-                    ),
-                  ],
-                  fontSize: 22,
-                  color: Color(0xff21d4f3),
-              ),
-            ),
-          ),
-        ),
-        Container(
-          padding: const EdgeInsets.fromLTRB(_hPad, 0.0, _hPad, 0.0),
-          child: Container(
-            child: Text(
-              _body,
-              style: TextStyle(
-                fontFamily: 'Montserrat',
-                fontSize: 20,
-                color: Colors.amber,
+          // padding: const EdgeInsets.fromLTRB(1, 10.0, 1, 10.0),
+          child: SizedBox(
+            height: MediaQuery.of(context).size.height * containerHeightFraction*0.5,
+            width: MediaQuery.of(context).size.width * containerWidthFraction*1.2,
+            child: Container(
+              color: Colors.black38,
+              child: Align(
+                alignment: Alignment.center, // Aligns child in the center of the container
+                child: Text(
+                  _title,
+                  style: TextStyle(
+                      fontFamily: 'Montserrat',
+                      fontWeight: FontWeight.w600,
+                      shadows: [
+                        Shadow(
+                          color: Colors.black, // Choose the color of the shadow
+                          blurRadius:
+                          3.0, // Adjust the blur radius for the shadow effect
+                          offset: Offset(3.0,
+                              3.0), // Set the horizontal and vertical offset for the shadow
+                        ),
+                      ],
+                      fontSize: 18,
+                      color: Color(0xff21d4f3),
+                  ),
+                ),
               ),
             ),
           ),
