@@ -1,7 +1,7 @@
 plugins {
     id "com.android.application"
     id "kotlin-android"
-    id "dev.flutter.flutter-gradle-plugin"
+    id "dev.flutter.flutter-gradle-plugin" // Flutter plugin
 }
 
 def localProperties = new Properties()
@@ -12,19 +12,13 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
+// Flutter versioning configuration
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode') ?: '1'
+def flutterVersionName = localProperties.getProperty('flutter.versionName') ?: '1.0'
 
 android {
-    namespace "com.example.untitled1"
-    compileSdkVersion flutter.compileSdkVersion
+    namespace "com.example.untitled1" // Replace with your app's unique namespace
+    compileSdkVersion 34 // Set to the latest stable version for compatibility
     ndkVersion "26.1.10909125"
 
     compileOptions {
@@ -41,35 +35,55 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.untitled1"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion flutter.minSdkVersion
-        targetSdkVersion flutter.targetSdkVersion
+        applicationId "com.example.microbiology" // Change to your app's unique application ID
+        minSdkVersion 21 // Firebase or modern Android features require this as a minimum
+        targetSdkVersion 34 // Align with the compileSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
-        multiDexEnabled true
+        multiDexEnabled true // Enables multidex for apps with many methods
+    }
+    packagingOptions {
+        exclude 'META-INF/*.kotlin_module'
     }
 
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig signingConfigs.debug
+            signingConfig signingConfigs.debug // Replace with your release signingConfig when publishing
+            minifyEnabled false // Set to `true` for release to enable ProGuard or R8 optimizations
+            shrinkResources false
+        }
+    }
+
+    flavorDimensions "flavor-type"
+
+    productFlavors{
+        development{
+            dimension "flavor-type"
+        }
+        staging{
+            dimension "flavor-type"
+        }
+        production{
+            dimension "flavor-type"
         }
     }
 }
 
 flutter {
-    source '../..'
+    source '../..' // Points to the Flutter project directory
 }
-subprojects{
+
+dependencies {
+    // Add any additional dependencies here if needed.
+    // Example: implementation 'androidx.appcompat:appcompat:1.6.1'
+}
+
+subprojects {
     afterEvaluate {
-        android {
-            namespace 'com.example.untitled1'
+        if (android != null) {
+            android {
+                namespace = 'com.example.untitled1' // Ensure consistent namespace
+            }
         }
     }
 }
-
-dependencies {}
